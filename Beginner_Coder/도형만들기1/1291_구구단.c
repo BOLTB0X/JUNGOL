@@ -10,7 +10,6 @@ int main(void) {
 		else
 			printf("INPUT ERROR!\n");
 	}
-	
 	if (a < b) {
 		for (int i = 1; i <= 9; ++i) {
 			for (int j = a; j <= b; ++j) {
@@ -19,7 +18,6 @@ int main(void) {
 			printf("\n");
 		}
 	}
-
 	else {
 		for (int i = 1; i <= 9; ++i) {
 			for (int j = a; j >= b; --j) {
