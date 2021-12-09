@@ -77,7 +77,6 @@ void triangle_type(int h, int t) {
 
 void solution(void) {
 	int n, m;
-
 	scanf("%d %d", &n, &m);
 
 	if (n <= 0 || n > 100 || n % 2 == 0)
