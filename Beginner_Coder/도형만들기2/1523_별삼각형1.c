@@ -36,8 +36,7 @@ void solution(void) {
 	scanf("%d %d", &n, &m);
 
 	if (n <= 100 && m >= 1 && m <= 3) 
-		triangle_type(n, m);
-			
+		triangle_type(n, m);	
 	else 
 		printf("INPUT ERROR!");
 
