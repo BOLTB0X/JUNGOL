@@ -9,10 +9,9 @@ void solution(void) {
 
 	scanf("%d %s", &a, b);
 
-	for (int i = strlen(b) - 1; i >= 0; --i) {
+	for (int i = strlen(b) - 1; i >= 0; --i) 
 		printf("%d\n", a * (b[i] - '0'));
-	}
-
+	
 	printf("%d\n", a * atoi(b));
 
 	return;
