@@ -5,6 +5,7 @@
 void solution(void) {
 	int a, b, c;
 	char str[1001];
+	
 	scanf("%d %d %d", &a, &b, &c);
 
 	sprintf(str," %d", a * b * c);
