@@ -9,26 +9,26 @@ void triangle_type(int h, int t) {
 			printf("\n");
 		}
 
-		for (int i = 0; i < h / 2 + 1; ++i) {
-			for (int j = h / 2 - i; j >= 0; --j)
+		for (int i = h / 2 + 1; i >= 1; --i) {
+			for (int j = 1; j <= i; ++j)
 				printf("*");
 			printf("\n");
 		}
 	}
 
 	else if (t == 2) {
-		for (int i = 0; i < h / 2; ++i) {
-			for (int j = 0; j < h / 2 - i; ++j)
+		for (int i = 1; i <= h / 2; ++i) {
+			for (int j = h/2; j >= i; --j)
 				printf(" ");
-			for (int j = 0; j <= i; ++j)
+			for (int j = 1; j <= i; ++j)
 				printf("*");
 			printf("\n");
 		}
 
-		for (int i = 0; i < h / 2 + 1; ++i) {
-			for (int j = 0; j < i; ++j)
+		for (int i = 0; i < h/2 + 1; ++i) {
+			for (int j = 0; j < i; ++j) 
 				printf(" ");
-			for (int j = h / 2 - i; j >= 0; --j)
+			for (int j = h/2 + 1 - i; j > 0; --j)
 				printf("*");
 			printf("\n");
 		}
@@ -60,15 +60,15 @@ void triangle_type(int h, int t) {
 				printf("*");
 			printf("\n");
 		}
-
 		for (int i = 0; i < h / 2 + 1; ++i) {
 			for (int j = 0; j < h / 2; ++j)
 				printf(" ");
-			for (int j = 0; j <= i; ++j)
+			for (int j = 1; j <= i + 1; ++j)
 				printf("*");
 			printf("\n");
 		}
 	}
+
 	else
 		printf("INPUT ERROR!\n");
 
@@ -77,6 +77,7 @@ void triangle_type(int h, int t) {
 
 void solution(void) {
 	int n, m;
+
 	scanf("%d %d", &n, &m);
 
 	if (n <= 0 || n > 100 || n % 2 == 0)
