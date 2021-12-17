@@ -12,6 +12,7 @@ void solution(void) {
 		else
 			printf("INPUT ERROR!\n");
 	}
+	
 	if (s < e) {
 		for (int i = s; i <= e; ++i) {
 			for (int j = 1; j <= 9; ++j) {
