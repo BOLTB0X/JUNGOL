@@ -14,6 +14,14 @@ void triangle_type(int h, int t) {
 				printf("*");
 			printf("\n");
 		}
+		//다른 방법
+		/*
+		for (int i = 0; i < h / 2 + 1; ++i) {
+			for (int j = i; j < h / 2 + 1; ++j)
+				printf("*");
+			printf("\n");
+		}
+		*/
 	}
 
 	else if (t == 2) {
@@ -32,6 +40,25 @@ void triangle_type(int h, int t) {
 				printf("*");
 			printf("\n");
 		}
+		
+		//전체 다른 방법
+		/*
+		for (int i = 0; i < h / 2; ++i) {
+			for (int j = i; j < h / 2; ++j)
+				printf(" ");
+			for (int j = 0; j <= i; ++j)
+				printf("*");
+			printf("\n");
+		}
+
+		for (int i = 0; i < h / 2 + 1; ++i) {
+			for (int j = 0; j < i; ++j)
+				printf(" ");
+			for (int j = i; j < h / 2 + 1; ++j)
+				printf("*");
+			printf("\n");
+		}
+		*/
 	}
 
 	else if (t == 3) {
