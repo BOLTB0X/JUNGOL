@@ -8,7 +8,7 @@ void solution(void) {
 	char b[4];
 
 	scanf("%d %s", &a, b);
-
+	//하나씩
 	for (int i = strlen(b) - 1; i >= 0; --i) 
 		printf("%d\n", a * (b[i] - '0'));
 	
