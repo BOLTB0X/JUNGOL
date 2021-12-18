@@ -7,6 +7,7 @@ char pane[101][101];
 void fill_triangle(int n) {
 	char alp = 'A';
 	for (int i = 0; i < n; ++i) {
+		//대각선으로
 		for (int j = i, k = n - 1; j < n; ++j, --k) {
 			pane[j][k] = alp++;
 			if (alp > 'Z')
