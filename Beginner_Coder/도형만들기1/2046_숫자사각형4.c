@@ -7,6 +7,7 @@ void fill_pane(int n, int m) {
 	if (m == 1) {
 		int number = 0;
 		for (int i = 0; i < n; ++i) {
+			//행이 바뀌기기 전
 			number++;
 			for (int j = 0; j < n; ++j) {
 				pane[i][j] = number;
@@ -16,6 +17,7 @@ void fill_pane(int n, int m) {
 
 	else if (m == 2) {
 		for (int i = 0; i < n; ++i) {
+			//분기
 			if (i % 2 == 0) {
 				int number = 1;
 				for (int j = 0; j < n; ++j) 
