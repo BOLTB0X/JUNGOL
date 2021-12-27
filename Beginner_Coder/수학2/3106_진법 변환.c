@@ -19,7 +19,6 @@ void solution(void) {
 		long long tot = 0;
 		for (i = strlen(str) - 1, j = 1; i >= 0; i--, j *= a) {
 			if (str[i] >= 'A')
-				//정수로 변환
 				str[i] = '9' + (str[i] - 'A') + 1;
 			tot += j * (str[i] - '0');
 		}
