@@ -5,6 +5,7 @@
 char num[100001];
 
 void trans(int n, int b) {
+	//16진수
 	if (b == 16) {
 		for (int i = 0; n > 0;n/=b,i++) {
 			int tmp = n % b;
@@ -14,7 +15,7 @@ void trans(int n, int b) {
 				num[i] = tmp + '0';
 		}
 	}
-
+	//8진수, 2진수
 	else {
 		for (int i = 0; n > 0; n /= b, i++) {
 			int tmp = n % b;
