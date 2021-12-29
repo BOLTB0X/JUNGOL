@@ -5,7 +5,7 @@ int stack[100];
 int top = -1;
 
 int is_Full(void) {
-	//°¡µæ Â÷ÀÖ´ÂÁö
+	//ê°€ë“ì°¨ìˆë‹¤ë©´
 	if (top >= 99)
 		return 1;
 	return 0;
