@@ -20,12 +20,13 @@ void solution(void) {
 
 	for (int i = 0; i < 5; ++i) 
 		scanf(" %c %d", &colors[i], &nums[i]);
-
+	
+	//íŽ¸ì˜ë¥¼ ìœ„í•œ ì˜¬ë¦¼ì°¨ìˆœì •ë ¬
 	qsort(nums, 5, sizeof(int), compare);
 	
 	bool check[9];
 
-	//1¹ø Á¶°Ç
+	//1ë²ˆ ì¡°ê±´
 	check[0] = true;
 	
 	for (int i = 0; i < 4; ++i) {
@@ -46,7 +47,7 @@ void solution(void) {
 		return;
 	}
 
-	//2¹ø Á¶°Ç
+	//2ë²ˆ ì¡°ê±´
 	tmp = 0;
 	check[1] = false;
 	
@@ -58,7 +59,7 @@ void solution(void) {
 		return;
 	}
 
-	//3¹ø Á¶°Ç
+	//3ë²ˆ ì¡°ê±´
 	check[2] = false;
 	int cnt1 = 0, cnt2 = 0;
 	int max_val = nums[4];
@@ -85,7 +86,7 @@ void solution(void) {
 		return;
 	}
 
-	//4¹øÁ¶°Ç
+	//4ë²ˆì¡°ê±´
 	check[3] = true;
 
 	for (int i = 0; i < 5; ++i) {
@@ -98,7 +99,7 @@ void solution(void) {
 		return;
 	}
 	
-	//5¹øÁ¶°Ç
+	//5ë²ˆì¡°ê±´
 	check[4] = true;
 	tmp = nums[0];
 	for (int i = 1; i < 5; ++i) {
@@ -111,7 +112,7 @@ void solution(void) {
 		return;
 	}
 	
-	//6¹øÁ¶°Ç
+	//6ë²ˆì¡°ê±´
 	check[5] = true;
 	tmp = nums[2];
 	int cnt = 0;
@@ -128,10 +129,10 @@ void solution(void) {
 		return;
 	}
 
-	//7¹ø Á¶°Ç
+	//7ë²ˆ ì¡°ê±´
 	check[6] = false;
 	tmp = 0;
-	//³¡¸¸ ´Ù¸¥ °æ¿ì
+	//ëë§Œ ë‹¤ë¥¸ ê²½ìš°
 	if ((nums[0] == nums[1]) && (nums[2] == nums[3]))
 		check[6] = true;
 	if ((nums[1] == nums[2]) && (nums[3] == nums[4]))
@@ -144,7 +145,7 @@ void solution(void) {
 		return;
 	}
 	
-	//8¹øÁ¶°Ç
+	//8ë²ˆì¡°ê±´
 	check[7] = false;
 	int eq;
 	for (int i = 0; i < 4; ++i) {
@@ -159,7 +160,7 @@ void solution(void) {
 		return;
 	}
 
-	//9¹ø
+	//9ë²ˆ
 	printf("%d\n", 100 + nums[4]);
 	return;
 }
