@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 
-//¹è¿­·Î´Â ÇÑ °÷À» ºñ¿©¾ßÇÔ
+//ë°°ì—´ë¡œëŠ” í•œ ê³³ì„ ë¹„ì—¬ì•¼í•¨
 int queue[101];
 int head = 0, tail = 0, qsize = 0;
 
@@ -14,6 +14,7 @@ int is_Empty(void) {
 //push
 void enqueue(int data) {
 	queue[tail++] = data;
+	tail = tail % 101;
 	qsize++;
 	return;
 }
@@ -21,6 +22,7 @@ void enqueue(int data) {
 //pop
 int dequeue(void) {
 	int tmp = queue[head++];
+	head = head % 101;
 	qsize--;
 
 	return tmp;
