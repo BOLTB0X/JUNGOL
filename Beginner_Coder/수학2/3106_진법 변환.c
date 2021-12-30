@@ -2,6 +2,16 @@
 #include <stdio.h>
 #include <string.h>
 
+/*
+void print_answer(char* str) {
+	for (int i = strlen(str) - 1; i >= 0; --i)
+		printf("%c", str[i]);
+	printf("\n");
+
+	return;
+}
+*/
+
 long long a_to_dec(int a, char* str) {
 	long long tot = 0;
 	long long i, j;
@@ -23,7 +33,8 @@ void dec_to_b(int b, long long dec) {
 		else
 			res[i] = (dec % b) + '0';
 	}
-
+	//만약 정답 출력을 위해 strlen을 쓸 거면
+	// res[i] = '\0'; 마지막에 널을 추가
 	for (i = i - 1; i >= 0; --i)
 		printf("%c", res[i]);
 	printf("\n");
