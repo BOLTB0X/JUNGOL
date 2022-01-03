@@ -2,10 +2,12 @@
 #include <stdio.h>
 
 void recur(int n) {
-	if (n == 0)
+	if (n <= 0)
 		return;
-	printf("recursive\n");
-	recur(n - 1);
+	recur(n / 2);
+	printf("%d ", n);
+
+	return;
 }
 
 void solution(void) {
@@ -18,5 +20,6 @@ void solution(void) {
 
 int main(void) {
 	solution();
+
 	return 0;
 }
