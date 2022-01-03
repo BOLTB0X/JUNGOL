@@ -7,7 +7,6 @@ int arr_idx = 3;
 int recur(int n) {
 	if (n < arr_idx)
 		return arr[n];
-
 	arr[arr_idx++] = (arr[arr_idx - 1] * arr[arr_idx - 2]) % 100;
 	recur(n);
 }
