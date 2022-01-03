@@ -1,20 +1,17 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 
-void recur(int n, int tot, int cnt, int num) {
-	if (cnt == n) {
-		printf("%d\n", tot);
-		return;
-	}
-	recur(n, tot + num, cnt + 1, num + 1);
-	return;
+int recur(int n) {
+	if (n == 0)
+		return 0;
+	return n + recur(n - 1);
 }
 
 void solution(void) {
 	int n;
 	scanf("%d", &n);
 
-	recur(n, 0, 0, 1);
+	printf("%d\n", recur(n));
 	return;
 }
 
