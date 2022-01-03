@@ -4,7 +4,6 @@
 int recur(int n) {
 	if (n <= 1)
 		return 1;
-
 	return recur(n / 2) + recur(n - 1);
 }
 
