@@ -34,8 +34,8 @@ void solution(void) {
 		}
 		print_arr(arr, n);
 	}
+	
 	free(arr);
-
 	return;
 }
 
