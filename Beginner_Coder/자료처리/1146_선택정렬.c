@@ -20,23 +20,20 @@ void print_arr(int* arr, int len) {
 }
 
 void solution(void) {
-	int n, idx;
+	int n;
 	scanf("%d", &n);
 
 	int* arr = malloc(sizeof(int) * n);
 	for (int i = 0; i < n; ++i)
 		scanf("%d", &arr[i]);
-
+	int min_idx;
 	for (int i = 0; i < n - 1; ++i) {
-		int min_val = 0x7fffffff;
-		int flag = 0;
+		int min_idx = i;
 		for (int j = i; j < n; ++j) {
-			if (min_val > arr[j]) {
-				min_val = arr[j];
-				idx = j;
-			}
+			if (arr[min_idx] > arr[j]) 
+				min_idx = j;
 		}
-		swap(&arr[i], &arr[idx]);
+		swap(&arr[i], &arr[min_idx]);
 		print_arr(arr, n);
 	}
 	free(arr);
