@@ -4,24 +4,26 @@
 
 void solution(void) {
 	int n, result = -1, tot = 0;
+
 	scanf("%d", &n);
-
 	int* arr = malloc(sizeof(int) * n);
-	for (int i = 0; i < n; ++i) 
-		scanf("%d", &arr[i]);
-	
+
 	for (int i = 0; i < n; ++i) {
-		tot += arr[i];
+		scanf("%d", &arr[i]);
 
-		if (result < tot)
-			result = tot;
-
-		if (tot < 0)
-			tot = 0;
+		if (tot < 0) 
+			tot = arr[i];
+		
+		else {
+			tot += arr[i];
+			if (tot >= result)
+				result = tot;
+		}
 	}
+	if (tot >= result)
+		result = tot;
 
 	printf("%d", result);
-
 	free(arr);
 	return;
 }
