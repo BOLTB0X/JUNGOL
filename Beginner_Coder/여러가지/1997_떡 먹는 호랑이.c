@@ -9,8 +9,8 @@ void solution(void) {
 	scanf("%d %d", &n, &k);
 
 	for (int i = 1; i <= k/2; ++i) {
-		for (int j = i + 1; j <= k; ++j) {
-			days[1] = i;
+		days[1] = i;
+		for (int j = i + 1; j <= k; ++j) {	
 			days[2] = j;
 			
 			for (int l = 3; l <= n; ++l) {
