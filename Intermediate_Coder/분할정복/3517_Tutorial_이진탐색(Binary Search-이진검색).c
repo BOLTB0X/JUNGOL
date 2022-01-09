@@ -5,6 +5,7 @@
 int arr[500001];
 int targets[500001];
 
+//재귀
 int binary_Search(int target,int left, int right) {
 	int mid = (left + right) / 2;
 
