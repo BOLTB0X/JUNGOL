@@ -3,6 +3,7 @@
 
 int board[25][25];
 int visited[25][25];
+
 int result[25];
 int result_idx = 0;
 int apart_cnt = 0;
