@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 
+//upper_bound이용
 unsigned long long binary_Search(unsigned long long start, unsigned long long end, unsigned long long target) {
 	unsigned long long ret = target, mid;
 
