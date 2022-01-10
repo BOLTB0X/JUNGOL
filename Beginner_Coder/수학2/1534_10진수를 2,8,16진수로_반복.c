@@ -33,7 +33,26 @@ void solution(void) {
 	int dec, type;
 
 	scanf("%d %d", &dec, &type);
+	/* while문 버전
+	int tmp = dec;
+	int idx = 0;
+	while (tmp > 0) {
+		if (type == 16) {
+			if (tmp % 16 > 9)
+				result[idx++] = (tmp % 16) - 10 + 'A';
+			else
+				result[idx++] = (tmp % 16) + '0';
+			tmp /= 16;
+		}
+		else {
+			result[idx++] = (tmp % type) + '0';
+			tmp /= type;
+		}
+	}
 
+	for (int i = idx - 1; i >= 0; --i)
+		printf("%c", result[i]);
+	*/
 	trans(dec, type);
 	return;
 }
