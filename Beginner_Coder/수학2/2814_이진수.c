@@ -1,26 +1,31 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
 
-int trans_dec(char bin[]) {
-	int tmp = 0;
+int pow(int a, int b) {
+	int res = 1;
 
-	for (int i = 0; i < strlen(bin); ++i) {
-		tmp += (bin[i] - '0') * pow(2, strlen(bin) - 1 - i);
+	if (b == 0)
+		return 1;
+
+	for (int i = 0; i < b; ++i) {
+		res *= a;
 	}
 
-	return tmp;
+	return res;
 }
 
 void solution(void) {
 	char bin[31];
-	int result = 0;
 	scanf("%s", bin);
 
-	result = trans_dec(bin);
+	int tot = 0;
 
-	printf("%d\n", result);
+	for (int i = 0; i < strlen(bin) ; ++i) {
+		tot += (pow(2,strlen(bin) - 1 - i) * (bin[i] - '0'));
+	}
+
+	printf("%d\n", tot);
 	return;
 }
 
