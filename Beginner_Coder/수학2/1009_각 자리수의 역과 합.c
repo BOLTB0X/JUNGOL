@@ -1,27 +1,27 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <string.h>
 
-void get_reverse_and_tot(long long int n) {
-	long long int tot = 0, reverse_value = 0;
+void get_reverse_and_tot(unsigned long long number) {
+	unsigned long long tot = 0, reverse = 0;
 
-	while (n) {
-		reverse_value = (reverse_value * 10) + (n % 10);
-		tot += (n % 10);
-		n /= 10;
+	while (number > 0) {
+		reverse = (reverse * 10) + (number % 10);
+		tot += (number % 10);
+		number /= 10;
 	}
 
-	printf("%lld %lld\n", reverse_value, tot);
+	printf("%lld %lld\n", reverse, tot);
 	return;
 }
 
 void solution(void) {
 	while (1) {
-		long long int n;
+		unsigned long long n;
 		scanf("%lld", &n);
 
 		if (n == 0)
 			break;
+
 		get_reverse_and_tot(n);
 	}
 
