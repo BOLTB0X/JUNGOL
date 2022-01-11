@@ -54,6 +54,7 @@ void solution(void) {
 
 		trans_type2(type2, trans_num(type1, num));
 	}
+	return;
 }
 
 int main(void) {
