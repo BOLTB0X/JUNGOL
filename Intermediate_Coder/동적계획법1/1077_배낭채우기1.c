@@ -13,6 +13,7 @@ int Top_down(int n, int w) {
 
 	for (int i = 1; i <= n; ++i) {
 		for (int j = inf[i][0]; j <= w; ++j) {
+			//규칙성
 			tmp = dp[j - inf[i][0]] + inf[i][1];
 
 			dp[j] = max(dp[j], tmp);
