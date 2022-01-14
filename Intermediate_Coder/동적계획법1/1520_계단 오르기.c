@@ -20,9 +20,9 @@ void solution(void) {
 	dp[3] = my_max(steps[3] + steps[1], steps[2] + steps[3]);
 
 
-	//º¸ÅÒ¾÷
+	//ë³´í…€ì—…
 	for (int i = 4; i <= n; ++i) {
-		dp[i] = my_max(dp[i - 3] + steps[i - 1] + steps[i], dp[i - 2] + steps[i]);
+		dp[i] = my_max(steps[i] + dp[i - 2], steps[i] + dp[i - 3] + steps[i - 1]);
 	}
 
 	printf("%d", dp[n]);
