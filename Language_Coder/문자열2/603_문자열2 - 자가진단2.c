@@ -2,24 +2,30 @@
 #include <stdio.h>
 #include <string.h>
 
-int main(void) {
-	char input[101] = {0,};
+void solution(void) {
+	char input[101];
+
+	fgets(input, 101, stdin);
 	int flag = 1;
-	fgets(input,101,stdin);
 	
-	for (int i = 0; input[i] != 0; ++i) {
+	for (int i = 0; i < strlen(input); ++i) {
 		if (input[i] == ' ') {
 			if (flag == 1) {
-				flag = 0;
 				printf("\n");
+				flag = 0;
 			}
 			else
 				flag = 1;
 		}
-
 		else if (flag == 1)
 			printf("%c", input[i]);
 	}
+
+	return;
+}
+
+int main(void) {
+	solution();
 
 	return 0;
 }
