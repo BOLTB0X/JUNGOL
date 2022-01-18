@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int my_max(int a, int b) {
+int MAX(int a, int b) {
 	return a > b ? a : b;
 }
 
@@ -17,12 +17,13 @@ void solution(void) {
 
 	dp[1] = steps[1];
 	dp[2] = steps[1]+steps[2];
-	dp[3] = my_max(steps[3] + steps[1], steps[2] + steps[3]);
+	dp[3] = MAX(steps[3] + steps[1], steps[2] + steps[3]);
 
 
 	//보텀업
+	//바로 전 칸을 밟을 지 말지 결정
 	for (int i = 4; i <= n; ++i) {
-		dp[i] = my_max(steps[i] + dp[i - 2], steps[i] + dp[i - 3] + steps[i - 1]);
+		dp[i] = steps[i] + MAX(dp[i -3] + steps[i - 1], dp[i - 2]);
 	}
 
 	printf("%d", dp[n]);
