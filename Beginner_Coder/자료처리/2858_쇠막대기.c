@@ -3,28 +3,26 @@
 #include <string.h>
 
 void solution(void) {
-	char stick[100001];
-	int open_cnt = 0, result = 0, cmp = 0;
+	char stick[100001] = { 0, };
+	int open_cnt = 0, result = 0;
+	int flag = 0;
+
 	scanf("%s", stick);
 
 	for (int i = 0; i < strlen(stick); ++i) {
 		if (stick[i] == '(') {
 			open_cnt++;
-			cmp = 1;
+			flag = 0;
 		}
-
-		else if (stick[i] == ')' && cmp == 1) {
+		else if (stick[i] == ')' && flag == 0) {
 			result += --open_cnt;
-			cmp++;
+			flag = 1;
 		}
-		
-		else if (stick[i] == ')' && cmp != 1) {
-			open_cnt--;
+		else if (stick[i] == ')' && flag == 1) {
 			result++;
-			cmp++;
+			open_cnt--;
 		}
 	}
-
 	printf("%d", result);
 	return;
 }
