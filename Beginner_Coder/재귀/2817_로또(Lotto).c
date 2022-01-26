@@ -1,48 +1,43 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-int lotto[13];
-int vistied[13];
+int numbers[14];
+int com[14];
+int visited[14] = { 0, };
 
-void DFS(int n, int* arr, int level, int cur) {
+//조합
+void DFS(int n, int level, int cur) {
 	if (level == 6) {
-		for (int i = 0; i < 6; ++i) {
-			printf("%d ", lotto[i]);
-		}
+		for (int i = 0; i < 6; ++i)
+			printf("%d ", com[i]);
 		printf("\n");
 		return;
 	}
 
 	for (int i = cur; i < n; ++i) {
-		if (vistied[i] == 1)
+		if (visited[i])
 			continue;
-		lotto[level] = arr[i];
-		vistied[i] = 1;
-		DFS(n, arr, level + 1, i + 1);
-		vistied[i] = 0;
+		com[level] = numbers[i];
+		visited[i] = 1;
+		DFS(n, level + 1, i);
+		visited[i] = 0;
 	}
-
 	return;
 }
 
 void solution(void) {
 	int n;
 	scanf("%d", &n);
-	int* nums = malloc(sizeof(int) * n);
+	for (int i = 0; i < n; ++i) 
+		scanf("%d", &numbers[i]);
+	
+	
+	DFS(n, 0, 0);
 
-	for (int i = 0; i < n; ++i)
-		scanf("%d", &nums[i]);
-
-	memset(vistied, 0, n * sizeof(int));
-
-	DFS(n, nums, 0, 0);
-	free(nums);
 	return;
 }
-
 int main(void) {
 	solution();
+
 	return 0;
 }
