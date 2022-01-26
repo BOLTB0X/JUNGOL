@@ -3,6 +3,7 @@
 
 int arr[7];
 
+//눈의 합이 맞는지 체크
 int check(int n, int m) {
 	int tot = 0;
 	for (int i = 0; i < n; ++i)
@@ -18,15 +19,17 @@ void print_arr(int n) {
 	return;
 }
 
+//중복순열 
 void DFS(int n, int m, int level) {
+	//탈출 조건
 	if (level == n) {
 		if (check(n, m))
 			print_arr(n);
 		return;
 	}
 
-	for (int i = 1; i <= 6; ++i) {
-		arr[level] = i;
+	for (int i = 0; i < 6; ++i) {
+		arr[level] = (i + 1);
 		DFS(n, m, level + 1);
 	}
 }
