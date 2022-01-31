@@ -1,31 +1,33 @@
 #include <iostream>
-#include <stack>
 #include <string>
 
 using namespace std;
 
-void solution(void) {
-	string stick;
-	stack<char> st;
+int solution(string stick) {
+	int answer = 0;
+	int size = stick.length();
+	int open_cnt = 0;
+	bool flag = false;
 
-	cin >> stick;
-
-	int result = 0;
-
-	for (int i = 0; i < stick.length(); ++i) {
-		if (stick[i] == '(')
-			st.push('(');
-		else {
-			st.pop();
-			if (stick[i - 1] == '(')
-				result += st.size();
-			else
-				result++;
+	for (int i = 0; i < size; ++i) {
+		if (stick[i] == '(') {
+			open_cnt++;
+			flag = false;
+		}
+		else if (stick[i] == ')') {
+			if (!flag) {
+				--open_cnt;
+				answer += open_cnt;
+				flag = true;
+			}
+			else {
+				answer += 1;
+				open_cnt--;
+			}
 		}
 	}
-	
-	cout << result << '\n';
-	return;
+
+	return answer;
 }
 
 int main(void) {
@@ -33,7 +35,10 @@ int main(void) {
 	cin.tie(0);
 	cout.tie(0);
 
-	solution();
+	string stick;
+	cin >> stick;
+	int ret = solution(stick);
 
+	cout << ret;
 	return 0;
 }
