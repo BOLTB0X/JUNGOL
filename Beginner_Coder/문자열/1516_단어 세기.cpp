@@ -6,25 +6,23 @@
 using namespace std;
 
 void solution(void) {
-	string input_words;
+	string input;
 
 	while (1) {
-		getline(cin, input_words);
+		getline(cin, input);
 		map<string, int> dic;
 
-		if (input_words == "END")
+		if (input == "END")
 			break;
 
-		stringstream str_stream(input_words);
-		string key;
+		stringstream str_stream(input);
+		string buffer;
 
-		while (str_stream >> key) 
-			dic[key]++;
-		
+		while (str_stream >> buffer)
+			dic[buffer]++;
 		for (auto& d : dic)
 			cout << d.first << " : " << d.second << '\n';
 	}
-
 	return;
 }
 
