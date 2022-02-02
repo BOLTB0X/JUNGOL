@@ -5,35 +5,32 @@
 
 using namespace std;
 
-void solution(void) {
-	vector<string> words_list;
-	string input_word;
+void solution(vector<string>& str_v) {
+	string input;
 
 	while (1) {
-		getline(cin, input_word);
+		getline(cin, input);
 
-		if (input_word == "END")
+		if (input == "END")
 			break;
 
-		stringstream str_stream(input_word);
+		stringstream str_stream(input);
 		string buffer;
 
 		while (str_stream >> buffer) {
-			bool isMatch = true;
-			for (vector<string>::iterator it = words_list.begin(); it != words_list.end(); ++it) {
+			bool flag = 1;
+			for (vector<string>::iterator it = str_v.begin(); it != str_v.end();++it) {
 				if (*it == buffer)
-					isMatch = false;
+					flag = 0;
 			}
-			if (isMatch)
-				words_list.push_back(buffer);
+			if (flag)
+				str_v.push_back(buffer);
+			
 		}
-		
-		for (int i = 0; i < words_list.size(); ++i) 
-			cout << words_list[i] << ' ';
-		cout << "\n";
-		
+		for (auto& s : str_v)
+			cout << s << ' ';
+		cout << '\n';
 	}
-
 	return;
 }
 
@@ -42,6 +39,9 @@ int main(void) {
 	cin.tie(0);
 	cout.tie(0);
 
-	solution();
+	vector<string> str_v;
+
+	solution(str_v);
+
 	return 0;
 }
