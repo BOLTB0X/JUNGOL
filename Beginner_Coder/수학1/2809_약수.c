@@ -16,23 +16,24 @@ void swap(int* a, int* b) {
 void quick_Sort(int start, int end) {
 	if (start >= end) 
 		return;
-	int key = start, i = start + 1, j = end; //i´Â ¿ŞÂÊ j´Â ¿À¸¥ÂÊ, ÇÇ¹ş °ªÀ» °¡Àå ¿ŞÂÊÀ¸·Î °¡Á¤
-	while (i <= j) { //¾ù°¥¸®±â Àü±îÁö ¹İº¹
+	int key = start, i = start + 1, j = end; //iëŠ” ì™¼ìª½ jëŠ” ì˜¤ë¥¸ìª½, í”¼ë²— ê°’ì„ ê°€ì¥ ì™¼ìª½ìœ¼ë¡œ ê°€ì •
+	while (i <= j) { //ì—‡ê°ˆë¦¬ê¸° ì „ê¹Œì§€ ë°˜ë³µ
 		while (i <= end && arr[i] <= arr[key]) 
-			i++; //keyº¸´Ù Å« °ªÀÌ i¿¡ ´ã±ä´Ù.
+			i++; //keyë³´ë‹¤ í° ê°’ì´ iì— ë‹´ê¸´ë‹¤.
 		while (j > start && arr[j] >= arr[key]) 
-			j--; //keyº¸´Ù ÀÛÀº °ªÀÌ j¿¡ ´ã±âµµ·Ï
+			j--; //keyë³´ë‹¤ ì‘ì€ ê°’ì´ jì— ë‹´ê¸°ë„ë¡
 		if (i > j) 
 			swap(&arr[key], &arr[j]);
 		else 
 			swap(&arr[i], &arr[j]);
 	}
-	// ¾ù°¥¸± ¶§ ºÎºĞÀû Àç±ÍÀûÀ¸·Î È£Ãâ
+	// ì—‡ê°ˆë¦´ ë•Œ ë¶€ë¶„ì  ì¬ê·€ì ìœ¼ë¡œ í˜¸ì¶œ
 	quick_Sort(start, j - 1);
 	quick_Sort(j + 1, end);
 }
 
-void solution(void) {
+
+int main(void) {
 	int n, idx = 0;
 	scanf("%d", &n);
 
@@ -49,9 +50,5 @@ void solution(void) {
 	for (int i = 0; i < idx; ++i) 
 		printf("%d ", arr[i]);
 	printf("\n");
-}
-
-int main(void) {
-	solution();
 	return 0;
 }
