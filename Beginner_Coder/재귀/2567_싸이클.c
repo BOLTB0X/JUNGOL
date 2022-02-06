@@ -1,24 +1,26 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 
-void recur(int *arr, int n, int p, int number) {
-	if (arr[number] == 2) 
+void recursive(int* arr, int n, int p, int number) {
+	if (arr[number] == 2)
 		return;
+
 	arr[number]++;
-	recur(arr, n, p, (number * n) % p);
+	recursive(arr, n, p, (number * n) % p);
 	return;
 }
 
-int solution(int *arr, int n, int p) {
-	int cycle = 0;
-	recur(arr, n, p, n);
+int solution(int* arr, int n, int p) {
+	int answer = 0;
+
+	recursive(arr, n, p, n);
 
 	for (int i = 0; i < p; ++i) {
 		if (arr[i] == 2)
-			cycle++;
+			answer++;
 	}
 
-	return cycle;
+	return answer;
 }
 
 int main(void) {
