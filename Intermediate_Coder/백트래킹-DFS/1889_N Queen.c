@@ -10,10 +10,9 @@ int abs(int a) {
 }
 
 int is_promising(int row) {
-	// °°Àº ¿­ÀÌ¸é X, ´ë°¢¼±»ó¿¡ ÀÖ¾î¼­µµ X
-	for (int i = 0; i < row; i++) {
-		//Çà Â÷ÀÌ =  ¿­Â÷ÀÌ = °°Àº ´ë°¢¼± »ó
-		if (board[row] == board[i] || row - i == abs(board[row] - board[i]))
+	for (int col = 0; col < row; ++col) {
+		//ê°™ì€ ì—´ ë˜ëŠ” ëŒ€ê°ì„  ìƒ
+		if (board[row] == board[col] || row - col == abs(board[row] - board[col]))
 			return 0;
 	}
 	return 1;
