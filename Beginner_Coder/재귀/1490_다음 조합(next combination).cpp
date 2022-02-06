@@ -3,38 +3,32 @@
 
 using namespace std;
 
+vector<int> tmp;
 vector<vector<int>> com;
 
-void DFS(int n, int k, vector<int>& numbers, vector<bool>& visited, vector<int>& tmp, int cur, int level) {
+void DFS(int n, int k, vector<bool>& visited, int cur, int level) {
 	if (level == k) {
 		com.push_back(tmp);
 		return;
 	}
+
 	for (int i = cur; i < n; ++i) {
 		if (visited[i])
 			continue;
-		tmp.push_back(numbers[i]);
-		visited[i] = 1;
-		DFS(n, k, numbers, visited, tmp, i + 1, level + 1);
+		tmp.push_back(i + 1);
+		visited[i] = true;
+		DFS(n, k, visited, i + 1, level + 1);
+		visited[i] = false;
 		tmp.pop_back();
-		visited[i] = 0;
 	}
-
 	return;
 }
 
 void solution(int n, int k, vector<int>& v) {
-	vector<int> numbers;
-	vector<int> tmp_com;
-	vector<bool> visited;
-
-	for (int i = 0; i < n; ++i)
-		numbers.push_back(i + 1);
-	visited.resize(n, false);
-
-	//¸ÕÀú Á¶ÇÕ »ı¼º
-	DFS(n, k, numbers, visited, tmp_com, 0, 0);
 	int target = -1;
+	vector<bool> visited(n, false);
+
+	DFS(n, k, visited, 0, 0);
 
 	for (int i = 0; i < com.size(); ++i) {
 		bool flag = 1;
@@ -47,15 +41,16 @@ void solution(int n, int k, vector<int>& v) {
 			break;
 		}
 	}
+
+	//ë‹¤ìŒ ì¡°í•©ì´ ì¡´ì¬ í•˜ë©´
 	if (target != -1) {
-		for (int i = 0; i < k; ++i) 
+		for (int i = 0; i < k; ++i)
 			cout << com[target][i] << ' ';
 		cout << '\n';
 	}
-	else {
+	else 
 		cout << "NONE";
-	}
-
+	
 	return;
 }
 
@@ -69,8 +64,9 @@ int main(void) {
 
 	cin >> n >> k;
 	v.resize(k, 0);
-	for (int i = 0; i < k; ++i)
-		cin >> v[i];
+
+	for (int &x: v)
+		cin >> x;
 
 	solution(n, k, v);
 
