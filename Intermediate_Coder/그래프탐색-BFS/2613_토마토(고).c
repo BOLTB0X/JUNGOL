@@ -11,21 +11,25 @@ int board[1001][1001];
 TOMATO* que;
 int head = 0, tail = 0;
 
+//ìƒí•˜ì¢Œìš°
 const int dy[4] = { 1, -1, 0, 0 };
 const int dx[4] = { 0, 0, 1, -1 };
 
+//push
 void enqueue(int size, TOMATO data) {
 	que[tail++] = data;
 	tail = tail % size;
 	return;
 }
 
+//pop
 void dequeue(int size) {
 	head++;
 	head = head % size;
 	return;
 }
 
+//ë²”ìš° ë‚´
 int in_Range(int y, int x, int m, int n) {
 	return 0 <= y && 0 <= x && y < n && x < m;
 }
@@ -36,7 +40,7 @@ int solution(int m, int n) {
 
 	que = (TOMATO*)malloc(sizeof(TOMATO) * size);
 
-	//Åä¸¶Åä À§Ä¡ Ã£±â
+	//í† ë§ˆí†  ìœ„ì¹˜ ì°¾ê¸°
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < m; ++j) {
 			if (board[i][j] == 1) {
@@ -46,7 +50,7 @@ int solution(int m, int n) {
 		}
 	}
 
-	//BFSÅ½»ö
+	//BFSíƒìƒ‰
 	while (head != tail) {
 		TOMATO cur = que[head];
 		dequeue(size);
@@ -55,7 +59,7 @@ int solution(int m, int n) {
 			int ny = cur.y + dy[dir];
 			int nx = cur.x + dx[dir];
 
-			//¹üÀ§³», ¾ÈÀÍÀº Åä¸¶ÅäÀÌ¸é
+			//ë²”ìœ„ë‚´, ì•ˆìµì€ í† ë§ˆí† ì´ë©´
 			if (in_Range(ny, nx, m, n) && board[ny][nx] == 0) {
 				board[ny][nx] = 1;
 				answer = cur.day + 1;
@@ -65,7 +69,7 @@ int solution(int m, int n) {
 		}
 	}
 
-	//¾ÈÀÍÀº Åä¸¶Åä °Ë»ç
+	//ì•ˆìµì€ í† ë§ˆí†  ê²€ì‚¬
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < m; ++j) {
 			if (board[i][j] == 0)
