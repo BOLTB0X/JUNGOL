@@ -4,11 +4,12 @@
 
 using namespace std;
 
-int n, m; //¹æ, ¹®
-vector<vector<int>> graph; //¹«Çâ ±×·¡ÇÁ
-vector<bool> visited; //¹æ¹®¸®½ºÆ®
+int n, m; //ë°©, ë¬¸
+vector<vector<int>> graph; //ë¬´í–¥ ê·¸ë˜í”„
+vector<bool> visited; //ë°©ë¬¸ë¦¬ìŠ¤íŠ¸
 vector<int> answer;
 
+//ê¹Šì´ìš°ì„ íƒìƒ‰
 void DFS(int start) {
 	visited[start] = true;
 	answer.push_back(start);
@@ -35,13 +36,15 @@ int main(void) {
 		graph[from].push_back(to);
 		graph[to].push_back(from);
 	}
-
+	
+	//ì •ë ¬
 	for (int i = 1; i <= n; ++i) 
 		sort(graph[i].begin(), graph[i].end());
 
-	//DFS ½ÃÀÛ
+	//DFS ì‹œì‘
 	DFS(1);
-
+	
+	//ì¶œë ¥
 	for (int a : answer)
 		cout << a << ' ';
 	cout << '\n';
