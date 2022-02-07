@@ -21,7 +21,7 @@ void fill_pane(int n) {
 			if (!in_Range(cy, cx, n) || pane[cy][cx] != 0)
 				break;
 
-			while (true) {
+			while (1) {
 				pane[cy][cx] = number++;
 				int ny = cy + dy[dir];
 				int nx = cx + dx[dir];
