@@ -26,26 +26,7 @@ NODE dequeue(void) {
     return q[head++];
 }
 
-bool is_Empty(void) {
-    if (head == tail)
-        return false;
-    return true;
-}
-
-void input(void) {
-    cin >> n >> k;
-
-    for (int i = 0; i <= n; ++i)
-        visited[i] = 0;
-
-    for (int i = 1; i <= n; ++i)
-        cin >> codes[i];
-    cin >> start >> e;
-
-    return;
-}
-
-//ÇØ¹Ö°æ·Î Ã¼Å©
+//í•´ë°ê²½ë¡œ ì²´í¬
 bool is_process(int i, NODE data) {
     int cnt = 0;
     for (int j = 0; j < k; ++j) {
@@ -58,25 +39,25 @@ bool is_process(int i, NODE data) {
 }
 
 vector<int> solution() {
-    NODE tmp = {start};
+    NODE tmp = { start };
     tmp.path.push_back(start);
 
     enqueue(tmp);
     visited[start] = 1;
 
-    //BFSÅ½»ö ½ÃÀÛ
-    while (is_Empty()) {
+    //BFSíƒìƒ‰ ì‹œì‘
+    while (head != tail) {
         NODE cur = dequeue();
 
-        if (codes[cur.idx] == codes[e]) 
+        if (codes[cur.idx] == codes[e])
             return cur.path;
-        
+
         for (int i = 1; i <= n; ++i) {
-            //¹Ì¹æ¹®, ÇØ¹Ö°æ·Î Á¶°Ç
+            //ë¯¸ë°©ë¬¸, í•´ë°ê²½ë¡œ ì¡°ê±´
             if (visited[i] == 0 && is_process(i, cur)) {
-                NODE next = {i, cur.path};
+                NODE next = { i, cur.path };
                 next.path.push_back(i);
-                //´ÙÀ½ °æ·Îµé
+                //ë‹¤ìŒ ê²½ë¡œë“¤
                 enqueue(next);
                 visited[i] = 1;
             }
@@ -92,7 +73,15 @@ int main(void) {
     cin.tie(0);
     cout.tie(0);
 
-    input();
+    cin >> n >> k;
+
+    for (int i = 0; i <= n; ++i)
+        visited[i] = 0;
+
+    for (int i = 1; i <= n; ++i)
+        cin >> codes[i];
+    cin >> start >> e;
+
     vector<int> ret = solution();
 
     if (ret.empty())
@@ -100,7 +89,6 @@ int main(void) {
     else {
         for (int i = 0; i < ret.size(); ++i)
             cout << ret[i] << ' ';
-        cout << "\n";
     }
 
     return 0;
