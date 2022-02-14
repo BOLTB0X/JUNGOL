@@ -1,23 +1,37 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#define MLN 100001
 
 using namespace std;
 
-int n, m; //방, 문
-vector<vector<int>> graph; //무향 그래프
-vector<bool> visited; //방문리스트
-vector<int> answer;
+int n, m;
+vector<int> adj[MLN]; //무향 그래프
+vector<int> answer; //정답
+vector<bool> visited(MLN, false); //방문
 
-//깊이우선탐색
-void DFS(int start) {
-	visited[start] = true;
-	answer.push_back(start);
-	for (int next : graph[start]) {
-		if (visited[next])
-			continue;
-		DFS(next);
+void DFS(int cur) {
+	answer.push_back(cur);
+	visited[cur] = true;
+
+	for (int& next : adj[cur]) {
+		if (!visited[next])
+			DFS(next);
 	}
+	return;
+}
+
+void solution(void) {
+	//한 번도 들르지 않은 방이 있다면 그 중 가장 번호가 작은 방
+	for (int i = 1; i <= n; ++i)
+		sort(adj[i].begin(), adj[i].end());
+
+	DFS(1);
+
+	for (int& a : answer) 
+		cout << a << ' ';
+	cout << '\n';
+
 	return;
 }
 
@@ -26,28 +40,16 @@ int main(void) {
 	cin.tie(0);
 	cout.tie(0);
 
-	cin >> n >> m;
-	graph.resize(n + 1);
-	visited.resize(n + 1, false);
-	
-	for (int i = 0; i < m; ++i) {
-		int from, to;
-		cin >> from >> to;
-		graph[from].push_back(to);
-		graph[to].push_back(from);
-	}
-	
-	//정렬
-	for (int i = 1; i <= n; ++i) 
-		sort(graph[i].begin(), graph[i].end());
+	int a, b;
 
-	//DFS 시작
-	DFS(1);
-	
-	//출력
-	for (int a : answer)
-		cout << a << ' ';
-	cout << '\n';
+	cin >> n >> m;
+	for (int i = 0; i < m; ++i) {
+		cin >> a >> b;
+		adj[a].push_back(b);
+		adj[b].push_back(a);
+	}
+
+	solution();
 
 	return 0;
 }
