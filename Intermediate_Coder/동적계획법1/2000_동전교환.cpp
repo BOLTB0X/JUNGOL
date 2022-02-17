@@ -6,8 +6,23 @@ using namespace std;
 vector<int> dp;
 vector<int> coins;
 
-int min(int a, int b) {
-	return a < b ? a : b;
+void solution(int n, int target) {
+	//ì”ëˆ 1ë¶€í„° targetê¹Œì§€
+	//ë³´í…€ì—… ë°©ì‹
+	for (int i = 1; i <= target; ++i) {
+		//í˜„ì¬ íƒ€ê²Ÿì„ ì½”ì¸ë“¤ë¡œ ê±°ìŠ¤ëŸ¬ ì¤„ ìˆ˜ ìˆëŠ”ì§€
+		for (int j = 1; j <= n; ++j) {
+			//iê³¼ ë™ì „ì´ ê°™ë‹¤ë©´
+			if (i == coins[j]) {
+				dp[i] = 1;
+				break;
+			}
+			//íƒ€ê²Ÿ - ë™ì „ì´ 0ë³´ë‹¤ í¬ê³  ê¸°ì¡´ dpê°’ë³´ë‹¤ ì‘ë‹¤ë©´
+			if (i - coins[j] > 0 && dp[i] > dp[i - coins[j]])
+				dp[i] = dp[i - coins[j]] + 1;
+		}
+	}
+	return;
 }
 
 int main(void) {
@@ -26,21 +41,7 @@ int main(void) {
 	dp.resize(target + 1, target + 1);
 
 	
-	//ÀÜµ· 1ºÎÅÍ target±îÁö
-	//º¸ÅÒ¾÷
-	for (int i = 1; i <= target; ++i) {
-		//ÇöÀç Å¸°ÙÀ» ÄÚÀÎµé·Î °Å½º¸¦ ¼ö ÀÖ´ÂÁö È®ÀÎ
-		for (int j = 1; j <= n; ++j) {
-			//ÀÜµ·°ú µ¿ÀüÀÌ °°´Ù¸é
-			if (i == coins[j]) {
-				dp[i] = 1;
-				break;
-			}
-			//ÀÜµ· - µ¿ÀüÀÌ 0º¸´Ù Å©°í ±âÁ¸ dp°ªº¸´Ù ÀÛ´Ù¸é
-			if (i - coins[j] > 0 && dp[i] > dp[i - coins[j]] + 1)
-				dp[i] = dp[i - coins[j]] + 1;
-		}
-	}
+	solution(n, target);
 	
 	if (dp[target] != target + 1)
 		cout << dp[target];
