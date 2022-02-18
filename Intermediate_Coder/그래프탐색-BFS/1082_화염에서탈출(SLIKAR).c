@@ -1,60 +1,64 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#define ML 255555
 
 typedef struct {
 	int y, x, dist;
-} NODE;
+} Node;
 
-NODE que[25110];
-int head = 0, tail = 0;
+Node que[ML];
+int fr = 0, re = 0;
 
-void enqueue(NODE data) {
-	que[tail++] = data;
+void enqueue(Node data) {
+	que[re++] = data;
 	return;
 }
 
-NODE dequeue(void) {
-	return que[head++];
+Node dequeue(void) {
+	return que[fr++];
 }
 
-int r, c;
+int n, m;
 int visited[55][55];
 
-const int dy[4] = { -1,1,0,0 };
-const int dx[4] = { 0,0,-1,1 };
+const int dy[4] = { 1,-1,0,0 };
+const int dx[4] = { 0,0,1,-1 };
 
-void check(int y, int x, int sec) {
+void process_Check(int y, int x, int sec) {
+	//ì‘ë‹¤ë©´ ë°©ë¬¸í•œê²ƒì´ë¯€ë¡œ ì¢…ë£Œ
 	if (visited[y][x] <= sec)
 		return;
+
 	visited[y][x] = sec;
-	NODE fire = { y,x, sec };
+	//í™”ì—¼ì˜ í™•ì‚°ì„ ìœ„í•´
+	Node fire = { y,x,sec };
 	enqueue(fire);
 	return;
 }
 
 void BFS(int sy, int sx, int ey, int ex) {
-	while (head < tail) {
-		NODE cur = dequeue();
-		for (int dir = 0; dir < 4; ++dir) {
-			check(cur.y + dy[dir], cur.x + dx[dir], cur.dist + 1);
-		}
-	}
+	while (fr < re) {
+		Node cur = dequeue();
 
+		for (int dir = 0; dir < 4; ++dir) {
+			int ny = cur.y + dy[dir];
+			int nx = cur.x + dx[dir];
+			int ns = cur.dist + 1;
+
+			process_Check(ny, nx, ns);
+		}	
+	}
 	return;
 }
 
 void solution(int sy, int sx, int ey, int ex) {
-	//BFS ³Êºñ¿ì¼± Å½»ö
-	//ºóÄ­ . ,ºÒ '*', ¹ÙÀ§ 'X', ¿ë»çÀÇ Áı 'D', ½ºÅ¸Æ® 'S'
-
-	//ºÒÀ» ½Ã°£º°·Î ÁöÇË
-	visited[ey][ex] = 0;
+	//ë¨¼ì € BFSíƒìƒ‰ìœ¼ë¡œ ë¶ˆì˜ í™•ì‚° ì‹œê°„ë“¤ì€ ë°©ë¬¸ë¦¬ìŠ¤íŠ¸ì— ë‚¨ê¹€
+	visited[ey][ex] = 0; //ë¶ˆì´ ë¶™ìœ¼ë©´ ì•ˆë˜ë¯€ë¡œ
 	BFS(sy, sx, ey, ex);
-	
-	//ÀÌÁ¦ ¿ë»ç Â÷·Ê
-	head = 0, tail = 0;
-	visited[ey][ex] = 255110;
-	check(sy, sx, 0);
+
+	fr = 0, re = 0;
+	visited[ey][ex] = ML; // ì§„í–‰ìê°€ ë„ë‹¬í•´ì•¼ í•˜ë¯€ë¡œ
+	process_Check(sy, sx, 0);
 	BFS(sy, sx, ey, ex);
 
 	return;
@@ -63,31 +67,32 @@ void solution(int sy, int sx, int ey, int ex) {
 int main(void) {
 	char ch;
 	int sy = 0, sx = 0, ey = 0, ex = 0;
-	scanf("%d %d", &r, &c);
+	scanf("%d %d", &n, &m);
 
-	for (int i = 1; i <= r; ++i) {
-		for (int j = 1; j <= c; ++j) {
+	for (int i = 1; i <= n; ++i) {
+		for (int j = 1; j <= m; ++j) {
 			scanf(" %c", &ch);
+			visited[i][j] = ML;
 
-			visited[i][j] = 255110;
+			if (ch == 'D')
+				ey = i, ex = j;
 
-			if (ch == 'X')
+			else if (ch == 'X')
 				visited[i][j] = 0;
-			else if (ch == '*')
-				check(i, j, 0);
+
 			else if (ch == 'S')
 				sy = i, sx = j;
-			else if (ch == 'D')
-				ey = i, ex = j;
+
+			else if (ch == '*') 
+				process_Check(i, j, 0);
 		}
 	}
-	
+
 	solution(sy, sx, ey, ex);
 
-	if (visited[ey][ex] < 255110)
+	if (visited[ey][ex] < ML)
 		printf("%d", visited[ey][ex]);
 	else
 		printf("impossible");
-
 	return 0;
 }
