@@ -20,32 +20,33 @@ void pop(void) {
 	return top--;
 }
 
-void solution(int n) {
+int* solution(int n) {
 	int* answer = malloc(sizeof(int) * (n + 1));
 	for (int i = 0; i < n; ++i) {
-
+		//스택이 비어 있다면
 		if (top == -1) {
-			Node data = { i + 1, arr[i] };
-			push(data);
+			Node cur = { i, arr[i] };
+			push(cur);
 		}
 
 		else {
+			//해당 빌딩이 스택안에 빌딩보다 크면
 			while (top != -1 && stack[top].height < arr[i]) {
 				answer[stack[top].idx] = i + 1;
 				pop();
 			}
+
+			//현재 빌딩 다시 스택으로
+			Node cur = { i, arr[i] };
+			push(cur);
 		}
-		Node data = { i + 1, arr[i] };
-		push(data);
 	}
+	//남은 것들 처리
 	while (top != -1) {
 		answer[stack[top].idx] = 0;
 		pop();
 	}
-
-	for (int i = 1; i <= n; ++i)
-		printf("%d\n", answer[i]);
-	return;
+	return answer;
 }
 
 int main(void) {
@@ -55,7 +56,11 @@ int main(void) {
 	for (int i = 0; i < n; ++i) 
 		scanf("%d", &arr[i]);
 	
-	solution(n);
+	int* ret = solution(n);
+
+	//출력
+	for (int i = 0; i < n; ++i)
+		printf("%d\n", ret[i]);
 
 	return 0;
 }
