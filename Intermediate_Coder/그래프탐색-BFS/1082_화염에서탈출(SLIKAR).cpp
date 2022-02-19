@@ -24,40 +24,45 @@ Node dequeue(void) {
 	return que[head++];
 }
 
-void check(int y, int x, int r) {
-	//Áßº¹ ¹æÁö
-	if (sec[y][x] <= r)
+//í•´ë‹¹ íì˜ ì§„í–‰ê³¼ì •ì˜ ì„ í–‰ê³¼ì •
+void check(int y, int x, int dist) {
+	//ì¤‘ë³µ ë°©ì§€
+	if (sec[y][x] <= dist)
 		return;
-	sec[y][x] = r;
-	enqueue({ y, x, r });
+
+	sec[y][x] = dist;
+	enqueue({ y,x,dist });
 	return;
 }
 
-void BFS(int sy, int sx, int ey, int ex) {
+//ë„ˆë¹„ìš°ì„ íƒìƒ‰
+void BFS(void) {
 	while (head < tail) {
 		Node cur = dequeue();
 
 		for (int dir = 0; dir < 4; ++dir) {
 			int ny = cur.y + dy[dir];
 			int nx = cur.x + dx[dir];
+			int nd = cur.dist + 1;
 
-			check(ny, nx, cur.dist + 1);
+			check(ny, nx, nd);
 		}
 	}
+
 	return;
 }
 
 void solution(int sy, int sx, int ey, int ex) {
-	//¿ä»õ´Â ºÒ¿¡ ¿µÇâ X
-	sec[ey][ex] = 0; //0 Ã³¸®
-	//BFS·Î ºÒ ÁøÇà ¹× ÀÚÃë¸¦ ³²±è
-	BFS(sy, sx, ey, ex);
+	//í™”ì—¼ì˜ ì´ë™ê²½ë¡œ ì²´í¬
+	sec[ey][ex] = 0;
+	BFS();
 
+	//ì´ˆê¸°í™” í›„ ì¬ìš°ì˜ íƒˆì¶œ ê²½ë¡œ ì²´í¬
 	head = 0, tail = 0;
 	sec[ey][ex] = ML;
-	//½ÃÀÛ 0Ã³¸®
 	check(sy, sx, 0);
-	BFS(sy, sx, ey, ex);
+	BFS();
+	
 	return;
 }
 
@@ -65,31 +70,37 @@ int main(void) {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	int sy = 0, sx = 0, ey = 0, ex = 0;
-	string tmp;
 
+	//ë¹„ì–´ìˆëŠ” ì¹¸ '.', ë¶ˆì€ '*', ë°”ìœ„ 'X', ìš©ì‚¬ì˜ ì§‘ 'D', ì¬ìš°ì˜ ìœ„ì¹˜ 'S'
+	char ch;
+	int sy = 0, sx = 0, ey = 0, ex = 0;
 	cin >> r >> c;
 	for (int i = 0; i < r; ++i) {
-		cin >> tmp;
-		for (int j = 0; j < tmp.length(); ++j) {
+		for (int j = 0; j < c; ++j) {
+			cin >> ch;
 			sec[i][j] = ML;
-			//¹ÙÀ§´Â 0Ã³¸®
-			if (tmp[j] == 'X')
+
+			//ë°”ìœ„ëŠ” ì ‘ê·¼ ë¶ˆê°€
+			if (ch == 'X')
 				sec[i][j] = 0;
-			//ºÒ 
-			else if (tmp[j] == '*')
-				check(i, j, 0);
-			//½ÃÀÛ
-			else if (tmp[j] == 'S')
-				sy = i, sx = j;
-			//³¡
-			else if (tmp[j] == 'D')
+
+			//ëª©ì ì§€
+			else if (ch == 'D') 
 				ey = i, ex = j;
+			
+			//ì¶œë°œì§€
+			else if (ch == 'S') 
+				sy = i, sx = j;
+			
+			//ë¶ˆ
+			else if (ch == '*') {
+				check(i, j, 0);
+			}
 		}
 	}
 
 	solution(sy, sx, ey, ex);
-
+	
 	if (sec[ey][ex] < ML)
 		cout << sec[ey][ex];
 	else
