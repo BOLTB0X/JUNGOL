@@ -8,16 +8,13 @@ int n, result, robot1, robot2, flag = 0;
 vector<pair<int,int>> adj[ML];
 vector<bool> visited;
 
-//ÃÖ´ñ°ª ¹İÈ¯
-int max(int a, int b) {
+//ìµœëŒ“ê°’ ë°˜í™˜
+int MAX(int a, int b) {
 	return a > b ? a : b;
 }
 
-
-//±íÀÌ¿ì¼±Å½»öÀ¸·Î ÁøÇà
+//ê¹Šì´ìš°ì„ íƒìƒ‰ìœ¼ë¡œ ì§„í–‰
 void DFS(int cur, int tot, int cur_dist) {
-	visited[cur] = 1;
-
 	if (flag)
 		return;
 
@@ -27,25 +24,30 @@ void DFS(int cur, int tot, int cur_dist) {
 		return;
 	}
 
-	for (auto& next : adj[cur]) {
+	visited[cur] = 1;
+	for (pair<int,int>& next : adj[cur]) {
 		if (visited[next.first])
 			continue;
 		visited[next.first] = 1;
-		DFS(next.first, tot + next.second, max(cur_dist, next.second));
+		DFS(next.first, tot + next.second, MAX(cur_dist, next.second));
 	}
 	return;
 }
 
-void solution(void) {
+int solution(void) {
+	int answer = 0;
+	//ì´ˆê¸°í™”
 	visited.resize(n + 1, false);
 
-	//Å½»ö
+	//íƒìƒ‰
 	DFS(robot1, 0, 0);
-	return;
+
+	answer = result;
+	return answer;
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
@@ -59,8 +61,8 @@ int main(void) {
 		adj[b].push_back({ a,c });
 	}
 
-	solution();
+	int ret = solution();
 
-	cout << result;
+	cout << ret;
 	return 0;
 }
