@@ -5,6 +5,7 @@ using namespace std;
 
 vector<int> com;
 
+//백트래킹 이용
 void DFS(int n, vector<int>& numbers, vector<bool>& visited, int cur, int level) {
 	if (level == 6) {
 		for (int& c : com)
