@@ -10,18 +10,22 @@ void hanoi(int n, int from, int to, int other) {
 	hanoi(n - 1, from, other, to);
 	printf("%d : %d -> %d\n", n, from, to);
 	hanoi(n - 1, other, to, from);
+
+	return;
 }
 
-void solution(void) {
-	int n;
-	scanf("%d", &n);
-
+void solution(int n) {
+	//하노이
 	hanoi(n, 1, 3, 2);
 
 	return;
 }
 
 int main(void) {
-	solution();
+	int n;
+
+	scanf("%d", &n);
+
+	solution(n);
 	return 0;
 }
