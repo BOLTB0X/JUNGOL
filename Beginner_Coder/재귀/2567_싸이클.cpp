@@ -3,29 +3,34 @@
 
 using namespace std;
 
-void recur(vector<int>& v, int n, int m, int number) {
-	if (v[number] == 2)
+vector<int> result(1001, 0);
+
+//DFS 이용
+void DFS(int n, int m, int number) {
+	//싸이클이 생기면 탈출
+	if (result[number] == 2)
 		return;
-	v[number]++;
-	recur(v, n, m, (number * n) % m);
+	result[number]++;
+	DFS(n, m, (number * n) % m);
 	return;
 }
 
 int solution(int n, int m) {
-	vector<int> v(10001, 0);
-	int cycle = 0;
-	recur(v, n, m, n);
+	int answer = 0;
 
-	for (auto& a : v) {
-		if (a == 2)
-			cycle++;
+	result[n] = 1;
+	DFS(n, m, (n * n) % m);
+
+	for (int i = 0; i <= 1001; ++i) {
+		if (result[i] == 2)
+			answer++;
 	}
 
-	return cycle;
+	return answer;
 }
 
 int main(void) {
-	//�ʱ�ȭ
+	//초기화
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
