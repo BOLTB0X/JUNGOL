@@ -6,7 +6,7 @@ using namespace std;
 vector<int> combi;
 vector<bool> visited;
 
-//Áßº¹¼ø¿­
+//ì¤‘ë³µìˆœì—´
 void per_with_Repet(int n, int level) {
 	if (level == n) {
 		for (int& c : combi) 
@@ -23,7 +23,7 @@ void per_with_Repet(int n, int level) {
 	return;
 }
 
-//Áßº¹¼ø¿­
+//ì¤‘ë³µìˆœì—´
 void com_with_Repet(int n, int level, int cur) {
 	if (level == n) {
 		for (int& c : combi) 
@@ -40,8 +40,8 @@ void com_with_Repet(int n, int level, int cur) {
 	return;
 }
 
-//Á¶ÇÕ
-void combination(int n, int level) {
+//ìˆœì—´
+void per(int n, int level) {
 	if (level == n) {
 		for (int& c : combi)
 			cout << c << ' ';
@@ -54,7 +54,7 @@ void combination(int n, int level) {
 			continue;
 		combi.push_back(i);
 		visited[i] = true;
-		combination(n, level + 1);
+		per(n, level + 1);
 		visited[i] = false;
 		combi.pop_back();
 	}
@@ -68,7 +68,7 @@ void solution(int n, int m) {
 		com_with_Repet(n, 0, 1);
 	else if (m == 3) {
 		visited.resize(7, false);
-		combination(n, 0);
+		per(n, 0);
 	}
 	return;
 }
