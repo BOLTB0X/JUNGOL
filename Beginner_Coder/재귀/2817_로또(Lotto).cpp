@@ -17,11 +17,11 @@ void DFS(int n, vector<int>& numbers, vector<bool>& visited, int cur, int level)
 	for (int i = cur; i < n; ++i) {
 		if (visited[i])
 			continue;
-		com.push_back(numbers[i]);
 		visited[i] = true;
+		com.push_back(numbers[i]);
 		DFS(n, numbers, visited, i + 1, level + 1);
-		visited[i] = false;
 		com.pop_back();
+		visited[i] = false;
 	}
 
 	return;
@@ -35,6 +35,7 @@ void solution(int n, vector<int>& numbers) {
 }
 
 int main(void) {
+	//초기화
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
