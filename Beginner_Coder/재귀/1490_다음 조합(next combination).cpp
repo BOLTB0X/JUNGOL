@@ -6,7 +6,18 @@ using namespace std;
 vector<int> tmp;
 vector<vector<int>> com;
 
-void DFS(int n, int k, vector<bool>& visited, int cur, int level) {
+//동일한 배열인지 체크
+bool is_same_Arr(vector<int>& cmp, vector<int>& v) {
+	int size = v.size();
+	for (int i = 0; i < size; ++i) {
+		if (cmp[i] != v[i])
+			return false;
+	}
+	return true;
+}
+
+//조합
+void combination(int n, int k, vector<bool>& visited, int cur, int level) {
 	if (level == k) {
 		com.push_back(tmp);
 		return;
@@ -15,46 +26,41 @@ void DFS(int n, int k, vector<bool>& visited, int cur, int level) {
 	for (int i = cur; i < n; ++i) {
 		if (visited[i])
 			continue;
-		tmp.push_back(i + 1);
 		visited[i] = true;
-		DFS(n, k, visited, i + 1, level + 1);
-		visited[i] = false;
+		tmp.push_back(i + 1);
+		combination(n, k, visited, i + 1, level + 1);
 		tmp.pop_back();
+		visited[i] = false;
 	}
 	return;
 }
 
 void solution(int n, int k, vector<int>& v) {
-	int target = -1;
+	int target_idx = -1;
 	vector<bool> visited(n, false);
+	
+	//조합 생성
+	combination(n, k, visited, 0, 0);
 
-	DFS(n, k, visited, 0, 0);
-
-	for (int i = 0; i < com.size(); ++i) {
-		bool flag = 1;
-		for (int j = 0; j < k; ++j) {
-			if (com[i][j] != v[j])
-				flag = 0;
-		}
-		if (flag && i != com.size() - 1) {
-			target = i + 1;
+	//같은 조합이 있는 지 체크
+	for (int i = 0; i < com.size();++i) {
+		if (is_same_Arr(com[i], v)) {
+			target_idx = i;
 			break;
 		}
 	}
 
-	//다음 조합이 존재 하면
-	if (target != -1) {
-		for (int i = 0; i < k; ++i)
-			cout << com[target][i] << ' ';
-		cout << '\n';
-	}
-	else 
+	if (target_idx == com.size() - 1 || target_idx == -1)
 		cout << "NONE";
-	
+	else {
+		for (int& c : com[target_idx + 1])
+			cout << c << ' ';
+	}
 	return;
 }
 
 int main(void) {
+	//초기화
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
