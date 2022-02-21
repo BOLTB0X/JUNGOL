@@ -1,17 +1,17 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define ML 101
 
 int cheese_cnt = 0;
-int last_cnt = 0;
-
-int n, m;
-int board[101][101];
-int visited[101][101];
+int board[ML][ML];
+int visited[ML][ML];
 
 const int dy[4] = { 1,-1,0,0 };
 const int dx[4] = { 0,0,1,-1 };
 
-void init(void) {
+void init(int n, int m) {
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < m; ++j)
 			visited[i][j] = 0;
@@ -19,21 +19,18 @@ void init(void) {
 	return;
 }
 
-int in_Range(int y, int x) {
-	return 0 <= y && y < n && 0 <= x && x < m;
-}
-
-//±íÀÌ¿ì¼±Å½»öÀ¸·Î °ø±â°¡ µÉ Ä¡Áî ¿Í ³ì´Â Ä¡Áî¸¦ Ã¼Å©
-void DFS(int y, int x) {
-	//Ä¡Áî ¹ß°ß °¡ÀåÀÚ¸®¸¸ ³ì¿©¾ßÇØ¼­ Å»Ãâ
+//ê¹Šì´ìš°ì„ íƒìƒ‰
+//ê²‰ í…Œë‘ë¦¬ ê³µê¸°í™”ë  ëŒ€ìƒ ì²´í¬
+void DFS(int n, int m, int y, int x) {
+	//ì–´ì°¨í”¼ ì²« ê°€ìž¥ìžë¦¬ëŠ” ë¬´ì¡°ê±´ 0
 	if (board[y][x] == 1) {
 		cheese_cnt--;
-		board[y][x] = 0; //Ä¡Áî »èÁ¦
+		board[y][x] = 0; //ë…¹ìŒ
 		visited[y][x] = 1;
 		return;
 	}
 
-	//Ä¡Áîµµ ¾Æ´Ï°í ¹Ì¹æ¹®ÀÎ °æ¿ì
+	//ë¯¸ë°©ë¬¸ì¸ ê²½ìš°
 	else if (visited[y][x] == 0) {
 		visited[y][x] = 1;
 
@@ -46,43 +43,43 @@ void DFS(int y, int x) {
 			if (visited[ny][nx] == 1)
 				continue;
 
-			DFS(ny, nx);
+			DFS(n, m, ny, nx);
 		}
 	}
 	return;
 }
 
-int solution(void) {
-	int answer = 0;
+void solution(int n, int m) {
+	int cnt = 0, r_cnt = 0;
 
 	while (cheese_cnt != 0) {
-		//¹æ¹®¸®½ºÆ® ÃÊ±âÈ­
-		init();
-
-		//¹é¾÷
-		last_cnt = cheese_cnt;
-
-		//Ä¡Áî°¡ ¾ø´Â °¡ÀåÀÚ¸®¿¡¼­
-		DFS(0, 0);
-		answer++; //Ä«¿îÆ®
+		init(n, m);
+		cnt++;
+		r_cnt = cheese_cnt;
+		
+		//ê³µê¸°ë¡œ ë…¹ì´ê¸° ì‹œìž‘
+		DFS(n, m, 0, 0);
 	}
-	return answer;
+
+	printf("%d\n", cnt);
+	printf("%d\n", r_cnt);
+	return;
 }
 
 int main(void) {
+	int n, m;
+
 	scanf("%d %d", &n, &m);
-	
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < m; ++j) {
 			scanf("%d", &board[i][j]);
-			//Ä¡Áî Ä«¿îÆ®
+
 			if (board[i][j] == 1)
 				cheese_cnt++;
 		}
 	}
+	
+	solution(n, m);
 
-	int ret = solution();
-	printf("%d\n", ret);
-	printf("%d", last_cnt);
 	return 0;
 }
