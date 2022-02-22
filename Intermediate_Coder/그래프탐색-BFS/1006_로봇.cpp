@@ -1,130 +1,131 @@
-#include<iostream>
-#include<vector>
-#include<queue>
+#include <iostream>
 
 using namespace std;
 
-int n, m;
+typedef struct {
+    int y, x, dir, cmm;
+} Node;
+
+Node que[1000201];
+int fr = 0, re = 0;
+
+void enqueue(Node data) {
+    que[re++] = data;
+    return;
+}
+
+void dequeue(void) {
+    fr++;
+    return;
+}
+
 int board[101][101];
-bool visited[101][101][5];
+int visited[101][101][5];
+//동서남북
+const int dy[5] = { 0, 0, 0, 1, -1 };
+const int dx[5] = { 0, 1, -1, 0, 0 };
 
-const int dy[5] = { 0,0,0,1,-1 };
-const int dx[5] = { 0,1,-1,0,0 };
 
-int turn_Left(int cd) {
-    if (cd == 1) 
-        return 4;
-    else if (cd == 2) 
-        return 3;
-    else if (cd == 3) 
-        return 1;
-    else if (cd == 4) 
-        return 2;
+//방향 전환
+int turn_dir(char cmd, int dir) {
+    if (cmd == 'L') {
+        if (dir == 1)
+            return 4;
+        else if (dir == 2)
+            return 3;
+        else if (dir == 3)
+            return 1;
+        else if (dir == 4)
+            return 2;
+    }
+    else {
+        if (dir == 1)
+            return 3;
+        else if (dir == 2)
+            return 4;
+        else if (dir == 3)
+            return 2;
+        else if (dir == 4)
+            return 1;
+    }
 }
 
-int turn_Right(int cd) {
-    if (cd == 1) 
-        return 3;
-    else if (cd == 2) 
-        return 4;
-    else if (cd == 3) 
-        return 2;
-    else if (cd == 4) 
-        return 1;
-}
+int solution(int n, int m, int sy, int sx, int sd, int ey, int ex, int ed) {
+    int answer = -1;
 
-int BFS(queue<pair<pair<int, int>, pair<int, int>>>& que, pair<pair<int, int>, int> start, pair<pair<int, int>, int> end) {
-    int result = -1;
-    int sy, sx, sd, ey, ex, ed;
-    sy = start.first.first;
-    sx = start.first.second;
-    sd = start.second;
-    ey = end.first.first;
-    ex = end.first.second;
-    ed = end.second;
+    //너비우선탐색이용
+    Node start = { sy,sx,sd,0 };
+    enqueue(start);
+    visited[sy][sx][sd] = 1;
 
-    que.push({ {sy,sx},{sd,0} });
-    visited[sy][sx][sd] = true;
+    while (fr != re) {
+        int cy = que[fr].y;
+        int cx = que[fr].x;
+        int cd = que[fr].dir;
+        int cnt = que[fr].cmm;
+        dequeue();
 
-    while (!que.empty()) {
-        int cy = que.front().first.first;
-        int cx = que.front().first.second;
-        int cd = que.front().second.first;
-        int cnt = que.front().second.second;
-        que.pop();
-
+        //탈출조건
         if (cy == ey && cx == ex && cd == ed) {
-            result = cnt;
+            answer = cnt;
             break;
         }
 
+        //명령 1: go
         for (int k = 1; k <= 3; ++k) {
             int ny = cy + (dy[cd] * k);
             int nx = cx + (dx[cd] * k);
 
-            //이 방향으로 더이상 진행 불가
+            //범위초과 이 방향 및 k 불가 멈춰야함
             if (ny < 1 || ny > n || nx < 1 || nx > m)
                 break;
-            //이 방향으로 더이상 진행 불가
-            if (board[ny][nx] == 1)
-                break;
-            //재방문이면 
-            if (visited[ny][nx][cd])
+
+            //재방문 경우는 그냥 패스
+            if (visited[ny][nx][cd] == 1)
                 continue;
 
+            //벽인 경우는 방향을 틀어야 하므로
+            if (board[ny][nx] == 1)
+                break;
+
+            Node next = { ny,nx,cd,cnt + 1 };
+            enqueue(next);
             visited[ny][nx][cd] = 1;
-            que.push({ { ny,nx }, { cd,cnt + 1 } });
         }
 
-        int nd;
-        nd = turn_Left(cd);
-        if (!visited[cy][cx][nd]) {
-            visited[cy][cx][nd] = true;
-            que.push({ { cy, cx }, { nd,cnt + 1 } });
+        //방향 전환
+        int nd = turn_dir('L', cd); //L
+        if (visited[cy][cx][nd] == 0) {
+            Node next = { cy, cx, nd, cnt + 1 };
+            enqueue(next);
+            visited[cy][cx][nd] = 1;
         }
-        
-        nd = turn_Right(cd);
-        if (!visited[cy][cx][nd]) {
-            visited[cy][cx][nd] = true;
-            que.push({ { cy, cx }, { nd,cnt + 1 } });
+
+        nd = turn_dir('R', cd); //R
+        if (visited[cy][cx][nd] == 0) {
+            Node next = { cy, cx, nd, cnt + 1 };
+            enqueue(next);
+            visited[cy][cx][nd] = 1;
         }
     }
 
-    return result;
-}
-
-int solution(pair<pair<int, int>, int> start, pair<pair<int, int>, int> end) {
-    int answer = 0;
-
-    queue<pair<pair<int, int>, pair<int, int>>> que;
-    answer = BFS(que, start, end);
     return answer;
 }
 
 int main(void) {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
-
+    int n, m;
     cin >> n >> m;
     for (int i = 1; i <= n; ++i) {
         for (int j = 1; j <= m; ++j)
             cin >> board[i][j];
     }
 
-    int y, x, d;
-    pair<pair<int, int>, int> start, end;
-    cin >> y >> x >> d;
-    start.first.first = y;
-    start.first.second= x;
-    start.second = d;
-    
-    cin >> y >> x >> d;
-    end.first.first = y;
-    end.first.second= x;
-    end.second = d;
+    int sy, sx, sd, ey, ex, ed;
+    cin >> sy >> sx >> sd;
+    cin >> ey >> ex >> ed;
 
-    int ret = solution(start, end);
+    int ret = solution(n, m, sy, sx, sd, ey, ex, ed);
     cout << ret;
+
     return 0;
 }
