@@ -25,7 +25,6 @@ int visited[101][101][5];
 const int dy[5] = { 0, 0, 0, 1, -1 };
 const int dx[5] = { 0, 1, -1, 0, 0 };
 
-
 //방향 전환
 int turn_dir(char cmd, int dir) {
     if (cmd == 'L') {
