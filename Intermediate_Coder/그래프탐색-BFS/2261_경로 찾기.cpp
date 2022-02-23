@@ -1,71 +1,81 @@
 #include <iostream>
 #include <vector>
+#include <string>
 
 using namespace std;
 
 typedef struct {
     int idx;
     vector<int> path;
-} NODE;
+} Node;
 
-NODE q[1001];
-int head = 0, tail = 0;
+Node que[1001];
+int fr = 0, re = 0;
 
-int n, k;
-int start, e;
-
-string codes[1001];
-int visited[1001];
-
-void enqueue(NODE data) {
-    q[tail++] = data;
+void enqueue(Node data) {
+    que[re++] = data;
     return;
 }
 
-NODE dequeue(void) {
-    return q[head++];
+Node dequeue(void) {
+    return que[fr++];
 }
 
-//해밍경로 체크
-bool is_process(int i, NODE data) {
+//해밍 경로인지 체크
+int is_haming_dist(int k, string next, string cur) {
     int cnt = 0;
-    for (int j = 0; j < k; ++j) {
-        if (codes[data.idx][j] != codes[i][j]) {
+    for (int i = 0; i < k; ++i) {
+        if (next[i] != cur[i]) {
             cnt++;
         }
     }
-
-    return cnt >= 2 ? false : true;
+    return cnt == 1 ? 1 : 0;
 }
 
-vector<int> solution() {
-    NODE tmp = { start };
-    tmp.path.push_back(start);
+void solution(int n, int k, int start, int end, vector<string>& haming) {
+    vector<int> answer;
+    vector<int> tmp, visited(n + 1, 0);
 
-    enqueue(tmp);
+    tmp.push_back(start);
+
+    enqueue({ start, tmp });
     visited[start] = 1;
 
-    //BFS탐색 시작
-    while (head != tail) {
-        NODE cur = dequeue();
+    while (fr != re) {
+        Node cur = dequeue();
 
-        if (codes[cur.idx] == codes[e])
-            return cur.path;
+        //탈출조건
+        if (cur.idx == end) {
+            for (int& c : cur.path)
+                answer.push_back(c);
+            break;
+        }
 
+        //순회
         for (int i = 1; i <= n; ++i) {
-            //미방문, 해밍경로 조건
-            if (visited[i] == 0 && is_process(i, cur)) {
-                NODE next = { i, cur.path };
+            //재방문 
+            if (visited[i] == 1)
+                continue;
+
+            //해밍 거리가 1인지 확인
+            if (is_haming_dist(k, haming[i], haming[cur.idx]) == 1) {
+                //경로 및 현재 인덱스 업데이트
+                Node next = { i, cur.path };
                 next.path.push_back(i);
-                //다음 경로들
+                visited[next.idx] = 1; //방문 처리
                 enqueue(next);
-                visited[i] = 1;
             }
         }
     }
 
-    tmp.path.clear();
-    return tmp.path;
+    if (answer.size() == 0)
+        cout << -1;
+    else {
+        for (int& a : answer)
+            cout << a << ' ';
+    }
+
+    return;
 }
 
 int main(void) {
@@ -73,23 +83,17 @@ int main(void) {
     cin.tie(0);
     cout.tie(0);
 
+    int n, k, start, end;
+    vector<string> haming;
+
     cin >> n >> k;
+    haming.resize(n + 1);
 
-    for (int i = 0; i <= n; ++i)
-        visited[i] = 0;
+    for (int i = 1; i <= n; ++i) 
+        cin >> haming[i];
+    
+    cin >> start >> end;
 
-    for (int i = 1; i <= n; ++i)
-        cin >> codes[i];
-    cin >> start >> e;
-
-    vector<int> ret = solution();
-
-    if (ret.empty())
-        cout << "-1";
-    else {
-        for (int i = 0; i < ret.size(); ++i)
-            cout << ret[i] << ' ';
-    }
-
+    solution(n, k, start, end, haming);
     return 0;
 }
