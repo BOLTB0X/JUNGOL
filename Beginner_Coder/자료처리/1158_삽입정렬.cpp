@@ -2,14 +2,6 @@
 
 using namespace std;
 
-void swap(int* a, int* b) {
-	int tmp = *a;
-	*a = *b;
-	*b = tmp;
-
-	return;
-}
-
 void print_arr(int n, int* arr) {
 	for (int i = 0; i < n; ++i)
 		cout << arr[i] << ' ';
@@ -17,12 +9,13 @@ void print_arr(int n, int* arr) {
 	return;
 }
 
-void solution(int n, int *arr) {
+void insert_Sort(int n, int* arr) {
 	for (int i = 1; i < n; ++i) {
 		for (int j = i; j > 0; --j) {
-			if (arr[j] < arr[j - 1])
-				swap(&arr[j], &arr[j - 1]);
+			if (arr[j - 1] > arr[j])
+				swap(arr[j - 1], arr[j]);
 		}
+		//출력
 		print_arr(n, arr);
 	}
 
@@ -30,15 +23,18 @@ void solution(int n, int *arr) {
 }
 
 int main(void) {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
 	int n;
-	int* arr;
-	
+	int arr[100];
+
 	cin >> n;
-	arr = new int[n];
 	for (int i = 0; i < n; ++i)
 		cin >> arr[i];
 
-	solution(n, arr);
+	insert_Sort(n, arr);
 
 	return 0;
 }
