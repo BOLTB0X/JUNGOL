@@ -5,25 +5,22 @@ using namespace std;
 
 int solution(string stick) {
 	int answer = 0;
-	int size = stick.length();
 	int open_cnt = 0;
 	bool flag = false;
 
-	for (int i = 0; i < size; ++i) {
-		if (stick[i] == '(') {
+	for (char &s: stick) {
+		if (s == '(') {
 			open_cnt++;
-			flag = false;
+			flag = 0;
 		}
-		else if (stick[i] == ')') {
-			if (!flag) {
-				--open_cnt;
-				answer += open_cnt;
-				flag = true;
-			}
-			else {
-				answer += 1;
-				open_cnt--;
-			}
+		 // )을 만난 경우
+		else if (flag == 0 && s == ')') { //바로 앞이 ( 인 경우
+				answer += (--open_cnt);
+				flag = 1;
+		}
+		else if (flag == 1 && s == ')') {
+			answer++; //바로 앞이 같은 )이므로
+			open_cnt--;
 		}
 	}
 
