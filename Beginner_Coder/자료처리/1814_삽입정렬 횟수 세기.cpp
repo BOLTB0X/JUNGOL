@@ -2,27 +2,19 @@
 
 using namespace std;
 
-void swap(int* a, int* b) {
-	int tmp = *a;
-	*a = *b;
-	*b = tmp;
-
-	return;
-}
-
-void solution(int n, int* arr) {
+int insert_Sort(int n, int* arr) {
 	int cnt = 0;
+
 	for (int i = 1; i < n; ++i) {
 		for (int j = i; j > 0; --j) {
 			if (arr[j] < arr[j - 1]) {
-				swap(&arr[j], &arr[j - 1]);
-				cnt++;
+				swap(arr[j], arr[j - 1]);
+				cnt++; //스와핑이 일어 날때 카운트
 			}
 		}
 	}
 
-	cout << cnt;
-	return;
+	return cnt; //반환
 }
 
 int main(void) {
@@ -34,7 +26,9 @@ int main(void) {
 	for (int i = 0; i < n; ++i)
 		cin >> arr[i];
 
-	solution(n, arr);
+	int ret = insert_Sort(n, arr);
+	cout << ret;
+
 	delete(arr);
 	return 0;
 }
