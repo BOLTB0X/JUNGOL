@@ -11,7 +11,6 @@ void swap(int* a, int* b) {
 }
 
 void bubble_Sort(int* arr) {
-    //세 번만 반복
     for (int i = 6; i >= 4; --i) {
         for (int j = 0; j < 6; ++j) {
             if (arr[j] > arr[j + 1])
