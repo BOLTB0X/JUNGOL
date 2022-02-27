@@ -1,8 +1,9 @@
 #include <iostream>
+#define ML 1000000001
 
 using namespace std;
 
-void check(int number) {
+void check_Number(int number) {
 	if (number == 0 || number == 1) {
 		cout << "number one\n";
 		return;
@@ -20,8 +21,9 @@ void check(int number) {
 }
 
 void solution(int* arr) {
-	for (int i = 0; i < 5; ++i)
-		check(arr[i]);
+	for (int i = 0; i < 5; ++i) 
+		check_Number(arr[i]);
+		
 	return;
 }
 
