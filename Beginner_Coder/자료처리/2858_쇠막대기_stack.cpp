@@ -1,23 +1,26 @@
 #include <iostream>
 #include <string>
 #include <stack>
+
 using namespace std;
 
-
 int solution(string stick) {
-	int answer = 0;
-	int size = stick.length(); //±æÀÌ
-	stack<int> st;
-	
-	for (int i = 0; i < size; ++i) {
-		if (stick[i] == '(')
-			st.push(0); //top°¹¼ö¸¸ ¾Ë¸é µÇ¹Ç·Î
+	int answer = 0; 
+	int size = stick.length();
 
-		else { // µó´Â °ıÈ£¸¦ ¸¸³­ ´Ù¸é
-			st.pop(); // ÆË
-			if (stick[i - 1] == '(') //¹Ù·Î ÀüÀÌ ¿­¸²ÀÌ¸é
-				answer += st.size(); //top == size
-			else // ')'´Â ±âÈ£°¡ ¿¬¼ÓÀÌ¿´´Ù¸é
+	stack<int> st; //ì—°ì‚°ì„ ìœ„í•œ ìŠ¤íƒ ì„ ì–¸
+
+	for (int i = 0; i < size; ++i) {
+		if (stick[i] == '(') 
+			st.push(1); // ìŠ¤íƒ ì‚½ì…
+		// ')'ì„ ë§Œë‚˜ëŠ” ê²½ìš°
+		else {
+			st.pop(); 
+			//ë°”ë¡œì „ì´ ì˜¤í”ˆ ê¸°í˜¸ë¼ë©´
+			if (stick[i - 1] == '(') 
+				answer += (st.size());
+			//ë°”ë¡œ ì „ì´ í´ë¡œì¦ˆë¼ë©´
+			else
 				answer++;
 		}
 	}
@@ -26,7 +29,7 @@ int solution(string stick) {
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
