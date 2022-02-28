@@ -5,29 +5,32 @@ int n;
 int result = 0;
 int board[15];
 
-int abs(int a) {
+//절댓값 반환
+int Abs(int a) {
 	return a < 0 ? -a : a;
 }
 
-bool is_Process(int y) {
+int is_Process(int y) {
+	//해당 행과 열의 정보를 확인해야함
 	for (int i = 0; i < y; ++i) {
-		if (board[y] == board[i] || y - i == abs(board[y] - board[i]))
+		//같은 위치에 있는지 확인
+		if (board[y] == board[i] || y - i == Abs(board[y] - board[i]))
 			return 0;
 	}
-
 	return 1;
 }
 
 void backTracking(int y) {
-	if (n == y) {
+	//행이 n까지 갔다면
+	if (y == n) {
 		result++;
 		return;
 	}
+
 	for (int x = 0; x < n; ++x) {
-		board[y]= x;
-		if (is_Process(y)) 
+		board[y] = x; //열 정보 삽입
+		if (is_Process(y) == 1)
 			backTracking(y + 1);
-		
 	}
 	return;
 }
