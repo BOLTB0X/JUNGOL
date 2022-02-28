@@ -1,7 +1,23 @@
 #include <iostream>
-#include <queue>
 
 using namespace std;
+
+typedef struct {
+	int y, x, dist;
+} Node;
+
+Node que[2501];
+int fr = 0, re = 0;
+
+void enqueue(Node data) {
+	que[re++] = data;
+	return;
+}
+
+void dequeue(void) {
+	fr++;
+	return;
+}
 
 int n, m, result = -1;
 char board[50][50];
@@ -10,11 +26,12 @@ int visited[50][50];
 const int dy[4] = { 1,-1,0,0 };
 const int dx[4] = { 0,0,1,-1 };
 
-int max(int a, int b) {
-	return a > b ? a : b;
+int MAX(int a, int b) {
+	return a > b ? a : b; //반환
 }
 
 void init(void) {
+	fr = 0, re = 0; //큐 초기화
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < m; ++j)
 			visited[i][j] = 2501;
@@ -23,41 +40,37 @@ void init(void) {
 }
 
 void BFS(int y, int x) {
-	queue<pair<pair<int, int>, int>> que;
+	enqueue({ y,x,0 });
 	visited[y][x] = 0;
-	que.push({ {y,x},0 });
 
-	while (!que.empty()) {
-		int cy = que.front().first.first;
-		int cx = que.front().first.second;
-		int c_d = que.front().second;
-		que.pop();
+	//비어질때까지
+	while (fr < re) {
+		int cy = que[fr].y;
+		int cx = que[fr].x;
+		int cd = que[fr].dist;
+		dequeue();
 
 		for (int dir = 0; dir < 4; ++dir) {
 			int ny = cy + dy[dir];
 			int nx = cx + dx[dir];
 
+			//범위초과
 			if (ny < 0 || nx < 0 || ny >= n || nx >= m)
 				continue;
+
+			//이동 불가
 			if (board[ny][nx] == 'W')
 				continue;
 
-			int next_dist = c_d + 1;
-			if (visited[ny][nx] <= next_dist)
+			int nd = cd + 1;
+			if (visited[ny][nx] <= nd) //작다면 재방문
 				continue;
 
-			visited[ny][nx] = next_dist;
-			que.push({ {ny,nx},next_dist });
+			result = MAX(result, nd); //가장 긴 시간 걸리는 곳이니
+			visited[ny][nx] = nd;
+			enqueue({ ny,nx,nd });
 		}
 	}
-
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < m; ++j) {
-			if (visited[i][j] != 2501)
-				result = max(result, visited[i][j]);
-		}
-	}
-
 	return;
 }
 
@@ -65,14 +78,16 @@ void solution(void) {
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < m; ++j) {
 			if (board[i][j] == 'L') {
-				init();
-				BFS(i, j);
+				init(); //초기화
+				BFS(i, j); //여기에서 각 보물 묻힌 곳이라 가정
 			}
 		}
 	}
+	return;
 }
 
 int main(void) {
+	//초기화
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
