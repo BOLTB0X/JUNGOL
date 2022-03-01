@@ -1,64 +1,73 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
+#define ML 100001
 
 using namespace std;
 
-int n, m, x;
-vector<int> adj[100001]; //나보다 큰 넘들
-vector<int> r_adj[100001]; //나보다 작은 넘들
-bool visited[100001];
+int cnt, r_cnt;
+vector<int> adj[ML]; //큰 놈들 -> 최악의 등수를 알 수 있음
+vector<int> r_adj[ML]; // 작은 놈들 -> 최고의 등수를 알 수 있음
+int visited[ML];
 
-int cnt = 0;
-int r_cnt = 0;
+//기준 보다 큰 애들
+void Lower(int cur) {
+	if (visited[cur] == 1)
+		return;
 
-void DFS(int cur) {
-    if (visited[cur])
-        return;
-    visited[cur] = true;
-    cnt++;
+	visited[cur] = 1;
+	cnt++;
 
-    for (int& next : adj[cur])
-        DFS(next);
-    return;
+	for (int& next : adj[cur]) 
+		Lower(next);
+	return;
 }
 
-void R_DFS(int cur) {
-    if (visited[cur])
-        return;
-    visited[cur] = true;
-    r_cnt++;
+//기준보다 작은 애들 
+void Higher(int cur) {
+	if (visited[cur] == 1)
+		return;
 
-    for (int& next : r_adj[cur])
-        R_DFS(next);
-    return;
+	visited[cur] = 1;
+	r_cnt++;
+
+	for (int& next : r_adj[cur]) 
+		Higher(next);
+	return;
 }
 
-void solution(void) {
-    memset(visited, 0, sizeof(bool) * n + 1);
-    DFS(x);
-    memset(visited, 0, sizeof(bool) * n + 1);
-    R_DFS(x);
+pair<int, int> solution(int n, int m, int x) {
+	pair<int, int> answer;
+	cnt = 0;
+	memset(visited, 0, sizeof(int) * n + 1); //방문리스트 초기화
+	Lower(x);
+	
+	r_cnt = 0;
+	memset(visited, 0, sizeof(int) * n + 1); //방문리스트 초기화
+	Higher(x);
 
-    cout << r_cnt << ' ' << n - cnt + 1 << '\n';
-    return;
+	answer.first = r_cnt;
+	answer.second = n - cnt + 1;
+	return answer;
 }
 
 int main(void) {
-    //초기화
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+	//초기화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
 
-    cin >> n >> m >> x;
+	int n, m, x;
+	cin >> n >> m >> x;
 
-    for (int i = 0; i < m; ++i) {
-        int a, b;
-        cin >> a >> b;
-        adj[a].push_back(b);
-        r_adj[b].push_back(a);
-    }
+	for (int i = 0; i < m; ++i) {
+		int a, b;
+		cin >> a >> b;
+		adj[a].push_back(b);
+		r_adj[b].push_back(a);
+	}
 
-    solution();
-    return 0;
+	pair<int, int> ret = solution(n, m, x);
+	cout << ret.first << ' ' << ret.second;
+	return 0;
 }
