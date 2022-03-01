@@ -4,43 +4,50 @@
 
 using namespace std;
 
-int n, result, robot1, robot2, flag = 0;
-vector<pair<int,int>> adj[ML];
-vector<bool> visited;
+typedef struct {
+	int next, dist;
+} Node;
 
-//최댓값 반환
-int MAX(int a, int b) {
-	return a > b ? a : b;
-}
+int result, flag = 0;
+vector<Node> adj[ML];
+vector<int> visited;
 
-//깊이우선탐색으로 진행
-void DFS(int cur, int tot, int cur_dist) {
-	if (flag)
+void DFS(int n, int cur, int target, int tot, int max_dist) {
+	//도달 햇는데 진행 할 경우
+	if (flag == 1)
 		return;
 
-	if (cur == robot2) {
-		result = tot - cur_dist;
+	//도착지에 도달했다면
+	if (cur == target) {
+		result = tot - max_dist; //최대 간선의 길이를 뺀다
 		flag = 1;
 		return;
 	}
 
-	visited[cur] = 1;
-	for (pair<int,int>& next : adj[cur]) {
-		if (visited[next.first])
+	visited[cur] = 1; //방문처리
+
+	//탐색
+	for (Node& next : adj[cur]) {
+		//재방문인 경우
+		if (visited[next.next] == 1)
 			continue;
-		visited[next.first] = 1;
-		DFS(next.first, tot + next.second, MAX(cur_dist, next.second));
+
+		visited[next.next] = 1;
+		int nd = next.dist > max_dist ? next.dist : max_dist;
+		DFS(n,next.next, target, tot + next.dist, nd);
 	}
+
 	return;
 }
 
-int solution(void) {
+int solution(int n, int robot1, int robot2) {
 	int answer = 0;
+	result = 0;
 	//초기화
-	visited.resize(n + 1, false);
+	visited.resize(n + 1, 0);
 
 	//탐색
-	DFS(robot1, 0, 0);
+	DFS(n, robot1,robot2, 0, 0);
 
 	answer = result;
 	return answer;
@@ -51,17 +58,18 @@ int main(void) {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-
+	int n, robot1, robot2;
 	int a, b, c;
 	cin >> n >> robot1 >> robot2;
 
+	//무향
 	for (int i = 0; i < n - 1; ++i) {
 		cin >> a >> b >> c;
 		adj[a].push_back({ b,c });
 		adj[b].push_back({ a,c });
 	}
 
-	int ret = solution();
+	int ret = solution(n, robot1, robot2);
 
 	cout << ret;
 	return 0;
