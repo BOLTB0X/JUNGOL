@@ -5,30 +5,33 @@ int arr_idx, target;
 int arr[11];
 int dp[64001];
 
-void solution(void) {	
+int solution(void) {
+	int answer = 0;
+	//dp í…Œì´ë¸” ìµœëŒ“ê°’ ì´ˆê¸°í™”
 	for (int i = 1; i <= target; ++i)
 		dp[i] = target + 1;
-
-	//ÀÜµ· 1ºÎÅÍ target±îÁö
-	//º¸ÅÒ¾÷
+	
+	//ë³´í…€ì—…
 	for (int i = 1; i <= target; ++i) {
 		for (int j = 1; j <= arr_idx; ++j) {
-			//ÀÜµ·°ú µ¿ÀüÀÌ °°´Ù¸é
+			//ë™ì „ì´ ê°™ë‹¤ë©´
 			if (i == arr[j]) {
 				dp[i] = 1;
 				break;
 			}
-			//ÀÜµ· - µ¿ÀüÀÌ 0º¸´Ù Å©°í ±âÁ¸ dp°ªº¸´Ù ÀÛ´Ù¸é
-			if (i - arr[j] > 0 && dp[i] > dp[i - arr[j]] + 1)
+
+			//í˜„ì¬ ë™ì „ ì¢…ë¥˜ë³´ë‹¤ í¬ê³  ê¸°ì¡´ dpí…Œì´ë¸”ë³´ë‹¤ í¬ë‹¤ë©´
+			if (i > arr[j] && dp[i] > dp[i - arr[j]] + 1)
 				dp[i] = dp[i - arr[j]] + 1;
 		}
 	}
 
 	if (dp[target] != target + 1)
-		printf("%d", dp[target]);
+		answer = dp[target];
 	else
-		printf("impossible");
-	return;
+		answer = -1;
+
+	return answer;
 }
 
 int main(void) {
@@ -39,6 +42,11 @@ int main(void) {
 
 	scanf("%d", &target);
 
-	solution();
+	int ret = solution();
+
+	if (ret != -1)
+		printf("%d", ret);
+	else
+		printf("impossible");
 	return 0;
 }
