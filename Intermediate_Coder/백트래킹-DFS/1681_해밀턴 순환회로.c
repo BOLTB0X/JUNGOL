@@ -6,46 +6,48 @@ int n, flag = 0, result = 0x7fffffff;
 int board[14][14];
 int visited[14];
 
-void check(int cur, int tot) {
-	//¸¶Áö¸· µ¹¾Æ°¡´Â ºñ¿ëÀÌ 0ÀÌ ¾Æ´Ï°í ±âÁ¸ ºñ¿ëº¸´Ù ´õ ÀÛ´Ù¸é
-	if (board[cur][1] != 0 && tot + board[cur][1] < result) {
-		flag = 1;
-		result = tot + board[cur][1];
-	}
-	return;
-}
-
+//DFSë¡œ ë°±íŠ¸ë˜í‚¹
 void DFS(int cur, int level, int tot) {
 	if (level == n) {
-		check(cur, tot);
+		//ë§ˆì§€ë§‰ ëŒì•„ê°€ëŠ” ê³³ì´ 0ì´ ì•„ë‹ˆê³  ê¸°ì¡´ ë¹„ìš©ë³´ë‹¤ ë” ì‘ë‹¤ë©´
+		if (board[cur][1] != 0 && tot + board[cur][1] < result) {
+			flag = 1;
+			result = tot + board[cur][1];
+		}
 		return;
 	}
 
 	for (int i = 2; i <= n; ++i) {
-		//Àç¹æ¹®
+		//ì¬ë°©ë¬¸
 		if (visited[i] == 1)
 			continue;
-		//ÀÌµ¿ºÒ°¡, Áï i -> i´Â 0Àº Å½»ö ÇÒ ÇÊ¿ä°¡ ¾øÀ½
+
+		//ì´ë™ë¶ˆê°€
+		//ì¥ì†Œ ì‚¬ì´ì— ì´ë™í•  ìˆ˜ ìˆëŠ” ë°©ë²•ì´ ì—†ë‹¤ë©´ ë¹„ìš©ì„ 0ìœ¼ë¡œ í‘œì‹œ
 		if (board[cur][i] == 0)
 			continue;
-		//Å« °æ¿ì
+
+		//ì§„í–‰í•˜ê¸° ë„ˆë¬´ í° ê²½ìš° -> ìµœì†Œ ë¹„ìš©ì„ êµ¬í•´ì• í•¨
 		if (tot + board[cur][i] > result)
 			continue;
+
 		visited[i] = 1;
 		DFS(i, level + 1, tot + board[cur][i]);
 		visited[i] = 0;
 	}
-
+	
 	return;
 }
 
-void solution(void) {
-	//¹æ¹®¸®½ºÆ® ÃÊ±âÈ­
+int solution(void) {
+	int answer = 0;
+	//ë°©ë¬¸ë¦¬ìŠ¤íŠ¸ ì´ˆê¸°í™”
 	memset(visited, 0, sizeof(int) * 14);
-	//¹éÆ®·¡Å· ½ÃÀÛ
+	//ë°±íŠ¸ë˜í‚¹ ì‹œì‘
 	DFS(1, 1, 0);
 
-	return;
+	answer = result;
+	return answer;
 }
 
 int main(void) {
@@ -56,11 +58,12 @@ int main(void) {
 			scanf("%d", &board[i][j]);
 	}
 
-	solution();
+	int ret = solution();
 
+	//ë„ë‹¬í•˜ì§€ ëª»í•œ ê²½ìš°
 	if (flag == 0)
-		result = 0;
+		ret = 0;
 
-	printf("%d", result);
+	printf("%d", ret);
 	return 0;
 }
