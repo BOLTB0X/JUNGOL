@@ -5,49 +5,47 @@
 using namespace std;
 
 typedef struct {
-	int next, dist;
+	int vertex, dist;
 } Node;
 
-int result, flag = 0;
+int result = 0x7fffffff; // 최솟값을 위한
 vector<Node> adj[ML];
 vector<int> visited;
 
-void DFS(int n, int cur, int target, int tot, int max_dist) {
-	//도달 햇는데 진행 할 경우
-	if (flag == 1)
-		return;
+int MIN(int a, int b) {
+	return a < b ? a : b;
+}
 
-	//도착지에 도달했다면
+//깊이우선탐색으로 거리의 합의 최솟값을 구함
+void DFS(int n, int cur, int target, int tot, int max_dist) {
+	//탈출 조건
 	if (cur == target) {
-		result = tot - max_dist; //최대 간선의 길이를 뺀다
-		flag = 1;
+		result = MIN(result, tot - max_dist);
 		return;
 	}
 
-	visited[cur] = 1; //방문처리
+	visited[cur] = 1;
 
-	//탐색
+	//노드를 탐색
 	for (Node& next : adj[cur]) {
-		//재방문인 경우
-		if (visited[next.next] == 1)
+		//재방문
+		if (visited[next.vertex] == 1)
 			continue;
 
-		visited[next.next] = 1;
+		visited[next.vertex] = 1;
 		int nd = next.dist > max_dist ? next.dist : max_dist;
-		DFS(n,next.next, target, tot + next.dist, nd);
+		//탐색
+		DFS(n, next.vertex, target, tot + next.dist, nd);
 	}
-
 	return;
 }
 
 int solution(int n, int robot1, int robot2) {
 	int answer = 0;
-	result = 0;
-	//초기화
-	visited.resize(n + 1, 0);
 
-	//탐색
-	DFS(n, robot1,robot2, 0, 0);
+	//방문리스트 초기화
+	visited.resize(n + 1, 0);
+	DFS(n, robot1, robot2, 0, 0);
 
 	answer = result;
 	return answer;
