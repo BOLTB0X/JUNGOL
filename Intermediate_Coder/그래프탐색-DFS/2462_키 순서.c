@@ -6,53 +6,56 @@ int adj[ML][ML];
 int visited[ML];
 int cnt[ML];
 
+//방문리스트 초기화
 void init(int n) {
 	for (int i = 1; i <= n; ++i) 
 		visited[i] = 0;
 	return;
 }
 
-//깊이 우선 탐색으로 object 기준으로 키 비교
-void DFS(int n, int m, int student, int object) {
-	//카운트 기준
-	if (student != object) {
+//깊이우선 탐색으로 카운팅
+void DFS(int n, int m, int student, int compare_student) {
+	//카운트 조건
+	if (student != compare_student) {
 		cnt[student]++;
-		cnt[object]++;
+		cnt[compare_student]++;
 	}
 
-	visited[student] = 1;
+	visited[student] = 1; //방문처리
 	for (int i = 1; i <= n; ++i) {
-		//비교할 학생이 없다면
-		if (adj[student][i] == 0)
-			continue;
 		//재방문
 		if (visited[i] == 1)
 			continue;
-		DFS(n, m, i, object);
+
+		//비교 학생이 없다면
+		if (adj[student][i] == 0)
+			continue;
+
+		//비교 학생 바꾸어 다시 탐색
+		DFS(n, m, i, compare_student);
 	}
 	return;
 }
 
 int solution(int n, int m) {
 	int answer = 0;
+	init(n);
 	
-	//방문리스트 및 카운트 초기화
-	for (int i = 1; i <= n; ++i) {
-		visited[i] = 0;
+	//카운트 배열 초기화
+	for (int i = 1; i <= n; ++i)
 		cnt[i] = 0;
+
+	for (int i = 1; i <= n; ++i) {
+		DFS(n, m, i, i); //비교 학생 i를 고정으로 각 탐색
+		init(n); //탐색 후 방문리스트 초기화
 	}
 
 	for (int i = 1; i <= n; ++i) {
-		DFS(n, m, i, i);
-		init(n); //방문리스트 초기화
-	}
-
-	//자기 자신을 제외하고 등수 비교가 가능하는 경우는 dist -> n-1인경우
-	for (int i = 1; i <= n; ++i) {
-		if (cnt[i] == n - 1)
+		//자기 등수를 알 수 있는 것은
+		if (cnt[i] == n - 1) //자기 자신을 제외한 n - 1
 			answer++;
 	}
-
+	
 	return answer;
 }
 
