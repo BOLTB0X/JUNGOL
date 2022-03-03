@@ -1,20 +1,20 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#define ML 255555
+#define MV 255555
 
 typedef struct {
 	int y, x, dist;
-} Node;
+} Block;
 
-Node que[ML];
+Block que[MV];
 int fr = 0, re = 0;
 
-void enqueue(Node data) {
+void enqueue(Block data) {
 	que[re++] = data;
 	return;
 }
 
-Node dequeue(void) {
+Block dequeue(void) {
 	return que[fr++];
 }
 
@@ -26,19 +26,20 @@ const int dx[4] = { 0,0,1,-1 };
 
 void process_Check(int y, int x, int sec) {
 	//작다면 방문한것이므로 종료
+	//무조건 커야함
 	if (visited[y][x] <= sec)
 		return;
 
 	visited[y][x] = sec;
 	//화염의 확산을 위해
-	Node fire = { y,x,sec };
+	Block fire = { y,x,sec };
 	enqueue(fire);
 	return;
 }
 
 void BFS(int sy, int sx, int ey, int ex) {
 	while (fr < re) {
-		Node cur = dequeue();
+		Block cur = dequeue();
 
 		for (int dir = 0; dir < 4; ++dir) {
 			int ny = cur.y + dy[dir];
@@ -46,7 +47,7 @@ void BFS(int sy, int sx, int ey, int ex) {
 			int ns = cur.dist + 1;
 
 			process_Check(ny, nx, ns);
-		}	
+		}
 	}
 	return;
 }
@@ -57,7 +58,7 @@ void solution(int sy, int sx, int ey, int ex) {
 	BFS(sy, sx, ey, ex);
 
 	fr = 0, re = 0;
-	visited[ey][ex] = ML; // 진행자가 도달해야 하므로
+	visited[ey][ex] = MV; // 진행자가 도달해야 하므로
 	process_Check(sy, sx, 0);
 	BFS(sy, sx, ey, ex);
 
@@ -72,7 +73,7 @@ int main(void) {
 	for (int i = 1; i <= n; ++i) {
 		for (int j = 1; j <= m; ++j) {
 			scanf(" %c", &ch);
-			visited[i][j] = ML;
+			visited[i][j] = MV;
 
 			if (ch == 'D')
 				ey = i, ex = j;
@@ -83,14 +84,14 @@ int main(void) {
 			else if (ch == 'S')
 				sy = i, sx = j;
 
-			else if (ch == '*') 
+			else if (ch == '*')
 				process_Check(i, j, 0);
 		}
 	}
 
 	solution(sy, sx, ey, ex);
 
-	if (visited[ey][ex] < ML)
+	if (visited[ey][ex] < MV)
 		printf("%d", visited[ey][ex]);
 	else
 		printf("impossible");
