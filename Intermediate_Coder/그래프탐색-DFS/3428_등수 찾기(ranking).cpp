@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
-#define ML 100001
+#define ML 100001 //최대 사이즈
 
 using namespace std;
 
