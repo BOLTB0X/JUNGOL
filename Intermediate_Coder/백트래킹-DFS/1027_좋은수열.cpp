@@ -4,55 +4,64 @@
 
 using namespace std;
 
-long long n;
-vector<string> result;
-char numbers[3] = { '1','2','3' };
+int flag = 0; //ì²´í¬ìš©
+string result;
 
-bool is_Good_seq(string seq) {
-	int size = seq.length();
+//ì¢‹ì€ ìˆ˜ì—´ì¸ì§€ ì²´í¬
+int is_Good_seq(string str) {
+	int size = str.length();
 
 	for (int i = 2; i <= size; i += 2) {
-		if (seq.substr(size - i / 2, i / 2) == seq.substr(size - i, i / 2))
-			return false;
+		//ê°™ìœ¼ë©´ ì•ˆë˜ê³ 
+		//ë’¤ì§‘ì–´ì ¸ -> ëŒ€ì¹­ìœ¼ë¡œ ë‚˜ì™€ì•¼í•¨
+		if (str.substr(size - i / 2, i / 2) == str.substr(size - i, i / 2))
+			return 0;
 	}
-	return true;
+	return 1;
 }
 
-void DFS(string seq) {
+//DFSë¡œ ë°±íŠ¸ë˜í‚¹
+void DFS(long long n, string seq) {
+	//ë‹µì´ ë‚˜ì™”ë‹¤ë©´
+	if (flag == 1)
+		return;
+
 	if (seq.length() == n) {
-		result.push_back(seq);
+		result = seq;
+		flag = 1; //ì²´í¬
 		return;
 	}
 
-	//Á¤´äÀÌ »ı±â¸é
-	if (!result.empty())
-		return;
-
-	//¾îÂ÷ÇÇ 1ºÎÅÍ 3±îÁö ¼øÂ÷ÀûÀ¸·Î Áõ°¡ÇÏ¹Ç·Î
-	//0¹øÂ° °ªÀÌ ÃÖ¼Ò°ª
-	for (int i = 0; i < 3; ++i) {
-		string tmp = seq + numbers[i];
-		if (is_Good_seq(tmp))
-			DFS(tmp);
+	//ìˆœìì ìœ¼ë¡œ ì¦ê°€í•˜ë¯€ë¡œ
+	//íƒìƒ‰ ì‹œì‘
+	for (int i = 1; i <= 3; ++i) {
+		seq.push_back(char(i + '0'));
+		if (is_Good_seq(seq) == 1) //ì¢‹ì€ ìˆ˜ì—´ì´ë©´
+			DFS(n, seq);
+		seq.pop_back();
 	}
-		
 	return;
 }
 
-void solution(void) {
-	DFS("");
-	return;
+string solution(long long n) {
+	string answer;
+
+	DFS(n, "");
+
+	answer = result;
+	return answer;
 }
 
 int main(void) {
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
 
+	long long n;
 	cin >> n;
 
-	solution();
-
-	cout << result[0];
+	string ret = solution(n);
+	cout << ret;
 	return 0;
 }
