@@ -1,29 +1,31 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <string.h>
 
 int coins_type[7];
-int cost[7] = {0, 500, 100, 50, 10, 5, 1 };
+int cost[7] = {0, 500, 100, 50, 10, 5, 1 }; //ë™ì „ì˜ ê°€ì¹˜
 int cnt[7];
 
-int min(int a, int  b) {
+int MIN(int a, int  b) {
 	return a < b ? a : b;
 }
 
 void solution(int n, int tot) {
 	int result = 0;
-	//µ¿ÀüÀÇ ÃÖ´ë °³¼ö¸¦ ±¸ÇØ¾ß ÇÏ¹Ç·Î
-	//ÀÛÀº µ¿Àü Å¸ÀÔºÎÅÍ ±×¸®µğ ¾Ë°í¸®Áò ¹æ½ÄÀ¸·Î ÁøÇàÇØ¾ßÇÔ
-	memset(cnt, 0, sizeof(int) * 7);
+	//ë™ì „ì˜ ìµœëŒ€ ê°œìˆ˜ë¥¼ êµ¬í•´ì•¼ í•˜ë¯€ë¡œ
+	//ì‘ì€ ë™ì „ íƒ€ì…ë¶€í„° ê·¸ë¦¬ë”” ì•Œê³ ë¦¬ì¦˜ ë°©ì‹ìœ¼ë¡œ ì§„í–‰í•´ì•¼í•¨
+	for (int i = 0; i < 7; ++i)
+		cnt[i] = 0;
 
-	n = tot - n;
+	n = tot - n; //ë‚¨ì€ ëˆìœ¼ë¡œ ë³€í™˜
 
+	//ê° ë™ì „ ì‚¬ìš©ì„ ìµœì†Œë¡œ ì¹´ìš´íŠ¸ ë°°ì—´ êµ¬í•¨
 	for (int i = 1; i <= 6; ++i) {
-		int tmp = min(coins_type[i], n / cost[i]);
-		n -= cost[i] * tmp;
+		int tmp = MIN(coins_type[i], n / cost[i]);
+		n -= (cost[i] * tmp);
 		cnt[i] += tmp;
 	}
 	
+	//ì´ ê°¯ìˆ˜ 
 	for (int i = 1; i <= 6; ++i) 
 		result += (coins_type[i] - cnt[i]);
 	
@@ -38,7 +40,7 @@ int main(void) {
 	scanf("%d", &n);
 	for (int i = 1; i <= 6; ++i) {
 		scanf("%d", &coins_type[i]);
-		tot += coins_type[i] * cost[i];
+		tot += (coins_type[i] * cost[i]);
 	}
 
 	solution(n, tot);
