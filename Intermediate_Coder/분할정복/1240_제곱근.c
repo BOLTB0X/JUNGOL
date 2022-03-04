@@ -7,7 +7,7 @@ unsigned long long binary_Search(unsigned long long start, unsigned long long en
 
 	while (start <= end) {
 		mid = (start + end) / 2;
-
+		
 		if (mid <= target / mid) {
 			ret = mid;
 			start = mid + 1;
