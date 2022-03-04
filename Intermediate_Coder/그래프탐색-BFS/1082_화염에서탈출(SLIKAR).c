@@ -3,7 +3,7 @@
 #define MV 255555
 
 typedef struct {
-	int y, x, dist;
+	int y, x, sec;
 } Block;
 
 Block que[MV];
@@ -18,79 +18,83 @@ Block dequeue(void) {
 	return que[fr++];
 }
 
-int n, m;
-int visited[55][55];
-
+int visited[51][51];
 const int dy[4] = { 1,-1,0,0 };
 const int dx[4] = { 0,0,1,-1 };
 
-void process_Check(int y, int x, int sec) {
-	//작다면 방문한것이므로 종료
-	//무조건 커야함
+//사전 체크
+void prepare_Process(int y, int x, int sec) {
+	//재방문 방지
 	if (visited[y][x] <= sec)
 		return;
-
+	
 	visited[y][x] = sec;
-	//화염의 확산을 위해
-	Block fire = { y,x,sec };
-	enqueue(fire);
+	Block pos = { y, x, sec };
+	enqueue(pos);
+
 	return;
 }
 
-void BFS(int sy, int sx, int ey, int ex) {
+//너비우선 탐색
+void BFS(int n, int m) {
 	while (fr < re) {
 		Block cur = dequeue();
 
 		for (int dir = 0; dir < 4; ++dir) {
 			int ny = cur.y + dy[dir];
 			int nx = cur.x + dx[dir];
-			int ns = cur.dist + 1;
+			int nd = cur.sec + 1;
 
-			process_Check(ny, nx, ns);
+			//범위 밖인 경우
+			if (ny < 0 || nx < 0 || ny >= n || nx >= m)
+				continue;
+
+			prepare_Process(ny, nx, nd);
 		}
 	}
-	return;
 }
 
-void solution(int sy, int sx, int ey, int ex) {
-	//먼저 BFS탐색으로 불의 확산 시간들은 방문리스트에 남김
-	visited[ey][ex] = 0; //불이 붙으면 안되므로
-	BFS(sy, sx, ey, ex);
+void solution(int n, int m, int sy, int sx, int ey, int ex) {
+	//화염먼저 진행
+	visited[ey][ex] = 0; // 목적지에는 불이 안 붙음
+	BFS(n, m); //먼저 BFS탐색으로 불의 확산 시간들은 방문리스트에 남김
 
-	fr = 0, re = 0;
-	visited[ey][ex] = MV; // 진행자가 도달해야 하므로
-	process_Check(sy, sx, 0);
-	BFS(sy, sx, ey, ex);
+	//이제 용사 진행
+	visited[ey][ex] = MV; //목적지에 가야하므로
+	prepare_Process(sy, sx, 0);
+	BFS(n, m); //먼저 BFS탐색으로 용사 진행 시간들은 방문리스트에 남김
 
 	return;
 }
 
 int main(void) {
-	char ch;
+	int n, m;
 	int sy = 0, sx = 0, ey = 0, ex = 0;
-	scanf("%d %d", &n, &m);
+	char ch;
 
-	for (int i = 1; i <= n; ++i) {
-		for (int j = 1; j <= m; ++j) {
+	scanf("%d %d", &n, &m);
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
 			scanf(" %c", &ch);
 			visited[i][j] = MV;
 
-			if (ch == 'D')
-				ey = i, ex = j;
-
-			else if (ch == 'X')
-				visited[i][j] = 0;
-
-			else if (ch == 'S')
+			if (ch == 'S') //출발
 				sy = i, sx = j;
 
-			else if (ch == '*')
-				process_Check(i, j, 0);
+			else if (ch == 'D') //목적기
+				ey = i, ex = j;
+
+			else if (ch == '*') //불
+				prepare_Process(i, j, 0);
+
+			else if (ch == 'X') //바위
+				visited[i][j] = 0;
 		}
 	}
 
-	solution(sy, sx, ey, ex);
-
+	solution(n, m, sy, sx, ey, ex);
+	
+	//출력
 	if (visited[ey][ex] < MV)
 		printf("%d", visited[ey][ex]);
 	else
