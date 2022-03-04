@@ -2,55 +2,52 @@
 #include <stdio.h>
 #define MS 21
 
-int result = 0x7fffffff;
-int cmd[MS] = { 0, };
+int result = 0x7fffffff; //ìµœì†Ÿê°’ì„ ìœ„í•œ
+int cmd[MS];
 
-//ÃÖ¼Ú°ª¹İÈ¯
+//ìµœì†Ÿê°’ë°˜í™˜
 int MIN(int a, int b) {
 	return a < b ? a : b;
 }
 
-//Àı´ñ°ª ¹İÈ¯
+//ì ˆëŒ“ê°’ ë°˜í™˜
 int Abs(int a) {
 	return a < 0 ? -a : a;
 }
 
-//DFS¸¦ ÀÌ¿ëÇÑ Å»Ãâ Á¶°Ç
-void DFS(int n, int o1, int o2, int size, int level, int tot) {
-	//Å»Ãâ Á¶°Ç
-	if (size < level) {
+//DFSë¥¼ ì´ìš©í•œ ë°±íŠ¸ë˜í‚¹
+void DFS(int n, int door_size, int open_door1, int open_door2, int tot, int level) {
+	//íƒˆì¶œ ì¡°ê±´
+	if (door_size == level) {
 		result = MIN(result, tot);
 		return;
 	}
-	
-	//¿­¸° ¹®À» ¼öÁ¤ÇÏ¿© ´Ù½Ã È£Ãâ
-	DFS(n, cmd[level], o2, size, level + 1, tot + Abs(o1 - cmd[level]));
-	DFS(n, o1, cmd[level], size, level + 1, tot + Abs(o2 - cmd[level]));
-	return; 
+
+	//ì—´ë¦° ë¬¸ì„ ìˆ˜ì •í•˜ì—¬ ë‹¤ì‹œ í˜¸ì¶œ
+	DFS(n, door_size, cmd[level], open_door2, tot + Abs(open_door1 - cmd[level]), level + 1);
+	DFS(n, door_size, open_door1, cmd[level] ,tot + Abs(open_door2 - cmd[level]), level + 1);
+	return;
 }
 
-int solution(int n, int size, int op1, int op2) {
+int solution(int n, int m, int open_door1, int open_door2) {
 	int answer = 0;
 
-	DFS(n, op1, op2, size, 1, 0);
-
+	DFS(n, m, open_door1, open_door2, 0, 0);
 	answer = result;
 	return answer;
 }
 
 int main(void) {
-	int n, door_size;
-	int open_door1, open_door2;
-
+	int n, m, open_door1, open_door2;
+	
 	scanf("%d", &n);
 	scanf("%d %d", &open_door1, &open_door2);
-	scanf("%d", &door_size);
-	
-	for (int i = 1; i <= door_size; ++i) 
+	scanf("%d", &m);
+
+	for (int i = 0; i < m; ++i) 
 		scanf("%d", &cmd[i]);
-
-	int ret = solution(n, door_size,open_door1, open_door2);
+	
+	int ret = solution(n, m, open_door1, open_door2);
 	printf("%d", ret);
-
 	return 0;
 }
