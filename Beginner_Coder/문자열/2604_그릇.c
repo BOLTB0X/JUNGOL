@@ -7,6 +7,7 @@ int main(void) {
 	int result = 10;
 
 	scanf("%s", str);
+	//문자열 탐색
 	for (int i = 1; i < strlen(str); ++i) {
 		if (str[i - 1] == str[i])
 			result += 5;
