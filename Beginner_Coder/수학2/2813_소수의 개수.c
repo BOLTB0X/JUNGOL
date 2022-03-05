@@ -2,28 +2,24 @@
 #include <stdio.h>
 #include <string.h>
 
-int prime[2000005];
+int prime[2000005] = { 0, };
 
+//에라토스테네체 이용
 void eratos(int number) {
 	prime[0] = prime[1] = 1;
 
 	for (int i = 2; i * i <= number; ++i) {
-		if (prime[i] == 0) {
-			for (int j = i * i; j <= number; j += i) {
-				prime[j] = 1;
-			}
-		}
+		if (prime[i] == 1)
+			continue;
+		for (int j = i + i; j <= number; j += i)
+			prime[j] = 1;
 	}
 
 	return;
 }
 
-void solution(void) {
-	int n, m;
-	scanf("%d %d", &n, &m);
-
+int solution(int n, int m) {
 	int result = 0;
-	memset(prime, 0, sizeof(int) * 2000005);
 
 	eratos(m);
 	for (int i = n; i <= m; ++i) {
@@ -31,12 +27,15 @@ void solution(void) {
 			result++;
 	}
 
-	printf("%d\n", result);
-	return 0;
+	return result;
 }
 
 int main(void) {
-	solution();
+	int n, m;
+	scanf("%d %d", &n, &m);
+
+	int ret = solution(n, m);
+	printf("%d", ret);
 
 	return 0;
 }
