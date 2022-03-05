@@ -2,23 +2,27 @@
 #include <stdio.h> 
 #include <string.h>
 
+void solution(int* occ, int A, int B, int C) {
+	int tmp = A * B * C;
+
+	while (tmp > 0) {
+		int rest = tmp % 10;
+		occ[rest]++;
+		tmp /= 10;
+	}
+
+	return;
+}
+
 int main(void) {
-	int occ[10];
+	int occ[10] = { 0, };
 	int num1, num2, num3;
 	scanf("%d %d %d", &num1, &num2, &num3);
 
-	int tmp = num1 * num2 * num3;
-	int div = 10;
-	memset(occ, 0, sizeof(int) * 10);
+	solution(occ, num1, num2, num3);
 
-	while (tmp > 0) {
-		int rest = tmp % div;
-		occ[rest]++;
-		tmp /= div;
-	}
-
-	for (int i = 0; i < 10; ++i) {
+	for (int i = 0; i < 10; ++i) 
 		printf("%d\n", occ[i]);
-	}
+	
 	return 0;
 }
