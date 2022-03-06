@@ -1,108 +1,106 @@
 #include <iostream>
+#include <vector>
+#define MV 2501
 
 using namespace std;
 
 typedef struct {
 	int y, x, dist;
-} Node;
+} Block;
 
-Node que[2501];
+Block que[MV];
 int fr = 0, re = 0;
 
-void enqueue(Node data) {
+void enqueue(Block data) {
 	que[re++] = data;
 	return;
 }
 
-void dequeue(void) {
-	fr++;
-	return;
+Block dequeue(void) {
+	return que[fr++];
 }
 
-int n, m, result = -1;
-char board[50][50];
-int visited[50][50];
-
+int path = -1;
 const int dy[4] = { 1,-1,0,0 };
 const int dx[4] = { 0,0,1,-1 };
 
-int MAX(int a, int b) {
-	return a > b ? a : b; //반환
-}
-
-void init(void) {
-	fr = 0, re = 0; //큐 초기화
+//초기화
+void init(vector<vector<int>>& visited, int n, int m) {
 	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < m; ++j)
-			visited[i][j] = 2501;
+		for (int j = 0; j < m; ++j) 
+			visited[i][j] = MV;
 	}
+	fr = 0, re = 0;
 	return;
 }
 
-void BFS(int y, int x) {
-	enqueue({ y,x,0 });
+//너비우선탐색
+void BFS(vector<vector<char>> board, vector<vector<int>>& visited, int n, int m, int y, int x) {
 	visited[y][x] = 0;
+	enqueue({ y,x,0 }); //삽입
 
-	//비어질때까지
 	while (fr < re) {
-		int cy = que[fr].y;
-		int cx = que[fr].x;
-		int cd = que[fr].dist;
-		dequeue();
+		Block cur = dequeue();
 
 		for (int dir = 0; dir < 4; ++dir) {
-			int ny = cy + dy[dir];
-			int nx = cx + dx[dir];
+			int ny = cur.y + dy[dir];
+			int nx = cur.x + dx[dir];
 
-			//범위초과
+			//범위초과시
 			if (ny < 0 || nx < 0 || ny >= n || nx >= m)
 				continue;
-
-			//이동 불가
+			
+			//물을 만날 경우
 			if (board[ny][nx] == 'W')
 				continue;
 
-			int nd = cd + 1;
-			if (visited[ny][nx] <= nd) //작다면 재방문
+			int nd = cur.dist + 1;
+			//재방문이고 작다면
+			if (visited[ny][nx] <= nd)
 				continue;
 
-			result = MAX(result, nd); //가장 긴 시간 걸리는 곳이니
+			if (nd > path) //긴 거리일 경우
+				path = nd;
 			visited[ny][nx] = nd;
-			enqueue({ ny,nx,nd });
+			enqueue({ ny, nx, nd });
 		}
 	}
 	return;
 }
 
-void solution(void) {
+int solution(vector<vector<char>> &board, int n, int m) {
+	int answer = 0;
+	vector<vector<int>> visited(n, vector<int>(m, 0)); //방문리스트 생성
+
+	//완전탐색 방식으로 각 L지점에서 가장 긴거리를 구함
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < m; ++j) {
 			if (board[i][j] == 'L') {
-				init(); //초기화
-				BFS(i, j); //여기에서 각 보물 묻힌 곳이라 가정
+				init(visited, n, m);
+				BFS(board, visited, n, m, i, j);
 			}
 		}
 	}
-	return;
+
+	answer = path;
+
+	return answer;
 }
 
 int main(void) {
-	//초기화
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-
+	int n, m;
+	vector<vector<char>> board;
 	string tmp;
 
 	cin >> n >> m;
+	board.resize(n, vector<char>(m, 0));
 	for (int i = 0; i < n; ++i) {
 		cin >> tmp;
 		for (int j = 0; j < m; ++j)
 			board[i][j] = tmp[j];
 	}
 
-	solution();
-
-	cout << result;
+	int ret = solution(board, n, m);
+	cout << ret;
 	return 0;
 }
