@@ -3,19 +3,14 @@
 
 using namespace std;
 
-int cnt;
+int cnt = 0;
+vector<vector<int>> board;
+//ìƒí•˜ìš°ì¢Œ
+const int dy[4] = { 1,-1,0,0 };
+const int dx[4] = { 0,0,1,-1 };
 
-//»óÇÏ¿ìÁÂ
-const int dy[4] = { 1, -1, 0, 0 };
-const int dx[4] = { 0, 0, 1, -1 };
-
-//¹üÀ§ ³»
-int in_Range(int y, int x, int n, int m) {
-	return 0 <= y && 0 <= x && y < n && x < m;
-}
-
-//³ìÀ» ¼ö ÀÖ´Â Ä¡Áî°¡ Á¸ÀçÇÏ´Â°¡
-int is_Melting(vector<vector<int>>& board, int n, int m) {
+//ë…¹ì„ ì¹˜ì¦ˆ ìˆëŠ”ì§€ í™•ì¸
+int is_Melting(int n, int m) {
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < m; ++j) {
 			if (board[i][j] == 1)
@@ -25,76 +20,75 @@ int is_Melting(vector<vector<int>>& board, int n, int m) {
 	return 0;
 }
 
-//DFS·Î °¡ÀåÀÚ¸® Ä¡Áîµé °ø±â·Î Á¦°Å
-//Ä¡Áî -> °ø±â ´Â -1Ã³¸®
-//´ÙÀ½ ÅÏ¿¡ °ø±âµÉ Ä¡Áî´Â 2·Î Ã³¸®
-void DFS(vector<vector<int>>& board, int n, int m, int y, int x) {
-	if (in_Range(y, x, n, m)) {
-		if (board[y][x] == 0) {
-			board[y][x] = -1;
+//DFSìœ¼ë¡œ ê°€ì¥ìë¦¬ íƒìƒ‰ - > 0ì¸ ì§€ì ì—ì„œ ìƒí•˜ì¢Œìš°ë¡œ íƒìƒ‰í•´ì„œ 1ì¸ê±¸ ì°¾ìœ¼ë©´ ë°”ê¿”ì£¼ë©´ ëŒ
+//ì¹˜ì¦ˆ - > ê³µê¸°ëŠ” -1ì²˜ë¦¬
+void DFS(int n, int m, int y, int x) {
+	if (board[y][x] == 0) {
+		board[y][x] = -1; //ë°©ë¬¸ë¦¬ìŠ¤íŠ¸ê°€ ì—†ìœ¼ë‹ˆ 
+		for (int dir = 0; dir < 4; ++dir) {
+			int ny = y + dy[dir];
+			int nx = x + dx[dir];
 
-			for (int dir = 0; dir < 4; ++dir) {
-				int ny = y + dy[dir];
-				int nx = x + dx[dir];
+			//ë²”ìœ„ì´ˆê³¼
+			if (ny < 0 || nx < 0 || ny >= n || nx >= m)
+				continue;
 
-				if (in_Range(ny, nx, n, m) && board[ny][nx] == 1)
-					board[ny][nx] = 2;
-				if (in_Range(ny, nx, n, m) && board[ny][nx] == 0)
-					DFS(board, n, m, ny, nx);
-			}
+			//ê°€ì¥ìë¦¬ ì¹˜ì¦ˆ ë°œê²¬
+			if (board[ny][nx] == 1)
+				board[ny][nx] = 2;
+
+			//ë‹¤ì‹œ ê³µê¸° ë°œê²¬
+			if (board[ny][nx] == 0)
+				DFS(n, m, ny, nx);
 		}
-		return;
 	}
 	return;
 }
 
-pair<int ,int> solution(vector<vector<int>>& board, int n, int m) {
-	pair<int, int> answer;
+pair<int, int> solution(int n, int m) {
+	pair<int, int> answer(0, 0);
 	
-	while (is_Melting(board, n, m)) {
-		answer.first++;
-		//³ì´Â µ¿¾È ³²Àº Ä¡Áî °¹¼ö¸¦ Ã¼Å©ÇÏ±â À§ÇØ ÃÊ±âÈ­
+	//ì‹œë®¬ì‹œì‘
+	while (is_Melting(n, m) == 1) {
+		answer.first++; //ì „ì²´ ë¼ìš´íŠ¸ ì¹´ìš´íŠ¸
 		cnt = 0;
-		DFS(board, n, m, 0, 0);
 
-		//³ì¾ÆÁú Ä¡Áî Á¦°Å
+		DFS(n, m, 0, 0);
 		for (int i = 0; i < n; ++i) {
 			for (int j = 0; j < m; ++j) {
+				//ì›ìƒë³µêµ¬
 				if (board[i][j] == -1)
 					board[i][j] = 0;
-				else if (board[i][j] == 2) {
+				//ë…¹ì„ ì¹˜ì¦ˆ
+				if (board[i][j] == 2) {
 					cnt++;
+					//ë…¹ì•„ì§ˆ ì¹˜ì¦ˆ ì œê±°
 					board[i][j] = 0;
 				}
-					
 			}
 		}
 	}
-
+	
+	//ë°”ë¡œ ì „ ì¹˜ì¦ˆ ê°¯ìˆ˜ 
 	answer.second = cnt;
+
 	return answer;
 }
 
 int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-
 	int n, m;
-	vector<vector<int>> board;
-
+	
 	cin >> n >> m;
 	board.resize(n, vector<int>(m, 0));
 
 	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < m; ++j)
+		for (int j = 0; j < m; ++j) 
 			cin >> board[i][j];
 	}
 
-	pair<int, int> ret = solution(board, n, m);
-
-	cout << ret.first << '\n';
-	cout << ret.second;
+	pair<int, int> ret = solution(n, m);
+	
+	cout << ret.first << "\n" << ret.second;
 
 	return 0;
 }
