@@ -3,6 +3,10 @@
 #include <string.h>
 
 typedef struct {
+	int answer1, answer2;
+} Pair;
+
+typedef struct {
 	int y, x, day;
 } JUGGLE;
 
@@ -24,6 +28,15 @@ int visited[101][101];
 
 const int dy[4] = { 1,-1,0,0 };
 const int dx[4] = { 0,0,1,-1 };
+
+//초기화
+void init(void) {
+	for (int i = 1; i <= m; ++i) {
+		for (int j = 1; j <= n; ++j)
+			visited[i][j] = 0;
+	}
+	return;
+}
 
 int BFS(int x, int y) {
 	int result = 0;
@@ -55,8 +68,11 @@ int BFS(int x, int y) {
 	return result;
 }
 
-void solution(int jx, int jy) {
-	int sec = BFS(jx, jy);
+Pair solution(int jx, int jy) {
+	Pair answer;
+
+	init(); //초기화
+	int sec = BFS(jx, jy); //너비우선탐색
 
 	int cnt = 0;
 	for (int i = 1; i <= m; ++i) {
@@ -65,11 +81,10 @@ void solution(int jx, int jy) {
 				cnt++;
 		}
 	}
+	answer.answer1 = sec + 3;
+	answer.answer2 = cnt;
 
-	printf("%d\n", sec + 3);
-	printf("%d", cnt);
-
-	return;
+	return answer;
 }
 
 int main(void) {
@@ -79,12 +94,13 @@ int main(void) {
 	for (int i = 1; i <= m; ++i) {
 		for (int j = 1; j <= n; ++j) 
 			scanf("%1d", &board[i][j]);
-	}
-
-	for (int i = 0; i <= m; ++i) 
-		memset(visited[i], 0, sizeof(int) * (n + 1));
-	
+	}	
 	scanf("%d %d", &jx, &jy);
-	solution(jx, jy);
+
+	//답
+	Pair ret = solution(jx, jy);
+
+	printf("%d\n", ret.answer1);
+	printf("%d\n", ret.answer2);
 	return 0;
 }
