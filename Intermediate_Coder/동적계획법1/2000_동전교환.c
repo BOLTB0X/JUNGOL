@@ -1,28 +1,28 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <stdlib.h>
 
-int arr_idx, target;
-int arr[11];
-int dp[64001];
-
-int solution(void) {
+int solution(int n, int target, int* coin_type) {
 	int answer = 0;
-	//dp 테이블 최댓값 초기화
-	for (int i = 1; i <= target; ++i)
-		dp[i] = target + 1;
-	
-	//보텀업
+	int* dp;
+
+	dp = (int*)malloc(sizeof(int) * (target + 1)); //dp테이블
+	for (int i = 0; i <= target; ++i)
+		dp[i] = target + 1; //최솟값을 위한 초기화
+
+	//보텀업 방식
 	for (int i = 1; i <= target; ++i) {
-		for (int j = 1; j <= arr_idx; ++j) {
-			//동전이 같다면
-			if (i == arr[j]) {
+		//i가 총 금액이라 가정
+		for (int j = 1; j <= n; ++j) {
+			//총 금액과 해당 동전 가치가 같다면
+			if (i == coin_type[j]) {
 				dp[i] = 1;
 				break;
 			}
 
-			//현재 동전 종류보다 크고 기존 dp테이블보다 크다면
-			if (i > arr[j] && dp[i] > dp[i - arr[j]] + 1)
-				dp[i] = dp[i - arr[j]] + 1;
+			//거슬러 줄수 있고 기존 보다 더 작다면
+			if (i > coin_type[j] && dp[i] > dp[i - coin_type[j]] + 1)
+				dp[i] = dp[i - coin_type[j]] + 1;
 		}
 	}
 
@@ -35,18 +35,20 @@ int solution(void) {
 }
 
 int main(void) {
-	scanf("%d", &arr_idx);
+	int n, target;
+	int *coin_type;
 
-	for (int i = 1; i <= arr_idx; ++i)
-		scanf("%d", &arr[i]);
+	scanf("%d", &n);
+	coin_type = (int*)malloc(sizeof(int) * (n + 1));
 
+	for (int i = 1; i <= n; ++i)
+		scanf("%d", &coin_type[i]);
 	scanf("%d", &target);
 
-	int ret = solution();
-
-	if (ret != -1)
-		printf("%d", ret);
-	else
+	int ret = solution(n, target, coin_type);
+	if (ret == -1)
 		printf("impossible");
+	else
+		printf("%d", ret);
 	return 0;
 }
