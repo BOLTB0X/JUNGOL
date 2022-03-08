@@ -3,10 +3,12 @@
 
 using namespace std;
 
-//Àç±Í¹öÀü
+//ìž¬ê·€ë²„ì „
 int recursive_func(string bin, int idx) {
-	if (idx == 0)
+	//íƒˆì¶œì¡°ê±´
+	if (idx == 0) 
 		return 0;
+	//í˜¸ì¶œ
 	return recursive_func(bin, idx - 1) * 2 + (bin[idx - 1] - '0');
 }
 
@@ -21,10 +23,10 @@ int main(void) {
 	int tot = 0;
 	int size = input.size();
 
-	//¹Ýº¹¹® ¹öÀü
+	//ë°˜ë³µë¬¸ ë²„ì „
 	for (int i = size - 1, j = 1; i >= 0; i--, j *= 2) 
 		tot += ((input[i] - '0') * j);
 	//cout << tot;
-	cout << recursive_func(input, size); //Àç±Í
+	cout << recursive_func(input, size); //ìž¬ê·€
 	return 0;
 }
