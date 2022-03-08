@@ -3,47 +3,52 @@
 
 using namespace std;
 
+//ë°˜í™˜
 int MAX(int a, int b) {
 	return a > b ? a : b;
 }
 
-int solution(vector<pair<int, int>>& bag, int n, int w) {
+int solution(int n, int w, vector<int>& wis, vector<int>& pis) {
 	int answer = 0;
-	//dp Å×ÀÌºí ÃÊ±âÈ­
+	//dpí…Œì´ë¸” ì´ˆê¸°í™”
 	vector<vector<int>> dp(n + 1, vector<int>(w + 1, 0));
 
+	//ë³´í…€ì—… ë°©ì‹
 	for (int i = 1; i <= n; ++i) {
 		for (int j = 1; j <= w; ++j) {
+			//í•´ë‹¹ ìœ„ì¹˜ëŠ” í•œ í–‰ì˜ ì´ì „
 			dp[i][j] = dp[i - 1][j];
 
-			if (bag[i].first <= j)
-				dp[i][j] = MAX(dp[i - 1][j - bag[i].first] + bag[i].second, dp[i - 1][j]);
+			//ì œí•œì„  ì´í•˜ì¼ ê²½ìš°
+			if (wis[i] <= j)
+				dp[i][j] = MAX(dp[i - 1][j - wis[i]] + pis[i], dp[i - 1][j]);
 		}
 	}
-	
+
 	answer = dp[n][w];
 	return answer;
 }
 
+
 int main(void) {
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
 
-	int n, w; //°¹¼ö, ¹è³¶ ¿ë·®
-	int wi, pi; // º¸¼®ÀÇ ¹«°Ô, °ª¾îÄ¡
-	vector<pair<int, int>> bag; //°¡¹æ
+	int n, w; //ê°¯ìˆ˜, ë°°ë‚­ ìš©ëŸ‰
+	int wi, pi; // ë³´ì„ì˜ ë¬´ê²Œ, ê°’ì–´ì¹˜
+	vector<int> wis, pis;
 
 	cin >> n >> w;
-	bag.resize(n + 1);
+	wis.resize(n + 1);
+	pis.resize(n + 1);
 
-	for (int i = 1; i <= n; ++i) {
-		cin >> wi >> pi;
-		bag[i].first = wi;
-		bag[i].second = pi;
-	}
+	for (int i = 1; i <= n; ++i) 
+		cin >> wis[i] >> pis[i];
+	
 
-	int ret = solution(bag, n, w);
+	int ret = solution(n, w, wis, pis);
 	cout << ret;
 
 	return 0;
