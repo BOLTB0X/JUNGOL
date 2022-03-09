@@ -10,6 +10,7 @@ int main(void) {
 
 		if (val == 0)
 			break;
+		
 		occ[(int)val / 10]++;
 	}
 
