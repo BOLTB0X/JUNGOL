@@ -4,48 +4,51 @@
 
 using namespace std;
 
-int flag = 0; //체크용
+int flag;
 string result;
 
-//좋은 수열인지 체크
+//좋은 수열인지 판단
 int is_Good_seq(string str) {
 	int size = str.length();
 
+	//좌우 반전처럼 반복되어야하는데 2개씩 자르는데 같으면 0
 	for (int i = 2; i <= size; i += 2) {
-		//같으면 안되고
-		//뒤집어져 -> 대칭으로 나와야함
 		if (str.substr(size - i / 2, i / 2) == str.substr(size - i, i / 2))
 			return 0;
 	}
+
 	return 1;
 }
 
-//DFS로 백트래킹
-void DFS(long long n, string seq) {
-	//답이 나왔다면
+void DFS(int n, string str) {
+	//답이 나온경우
 	if (flag == 1)
 		return;
 
-	if (seq.length() == n) {
-		result = seq;
-		flag = 1; //체크
+	//탈출조건
+	if (str.length() == n) {
+		result = str;
+		flag = 1;
 		return;
 	}
 
-	//순자적으로 증가하므로
-	//탐색 시작
+	//1부터 순차적으로 진행하므로
+	//처음 나오는 좋은 수열이 가장 작은 값
 	for (int i = 1; i <= 3; ++i) {
-		seq.push_back(char(i + '0'));
-		if (is_Good_seq(seq) == 1) //좋은 수열이면
-			DFS(n, seq);
-		seq.pop_back();
+		str.push_back((char)i + '0');
+		//현재 문자열이 좋은 수열이면?
+		if (is_Good_seq(str) == 1)
+			DFS(n, str); //진행
+		str.pop_back();
 	}
 	return;
 }
 
-string solution(long long n) {
+string solution(int n) {
 	string answer;
 
+	flag = 0;
+	//백트래킹으로 좋은 수열 구함
 	DFS(n, "");
 
 	answer = result;
@@ -53,15 +56,15 @@ string solution(long long n) {
 }
 
 int main(void) {
-	//초기화
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
 
-	long long n;
+	int n;
 	cin >> n;
-
+	
 	string ret = solution(n);
 	cout << ret;
+
 	return 0;
 }
