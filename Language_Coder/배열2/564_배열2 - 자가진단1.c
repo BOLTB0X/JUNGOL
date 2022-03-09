@@ -10,6 +10,7 @@ int main(void) {
 
 		if (alp < 'A' || alp > 'Z')
 			break;
+		
 		occ[alp - 'A']++;
 	}
 
