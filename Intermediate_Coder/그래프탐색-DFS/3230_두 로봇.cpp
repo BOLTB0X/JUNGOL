@@ -25,7 +25,6 @@ void DFS(int n, int cur, int target, int tot, int max_dist) {
 	}
 
 	visited[cur] = 1;
-
 	//노드를 탐색
 	for (Node& next : adj[cur]) {
 		//재방문
