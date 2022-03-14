@@ -1,35 +1,35 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 
-void recursive(int* arr, int n, int p, int number) {
-	if (arr[number] == 2)
-		return;
+int cnt[10001] = { 0, };
 
-	arr[number]++;
-	recursive(arr, n, p, (number * n) % p);
+void recursive_func(int n, int p, int number) {
+	//탈출조건
+	if (cnt[number] == 2) 
+		return;
+	
+	cnt[number]++;
+	recursive_func(n, p, (number * n) % p);
 	return;
 }
 
-int solution(int* arr, int n, int p) {
+int solution(int n, int p) {
 	int answer = 0;
 
-	recursive(arr, n, p, n);
-
-	for (int i = 0; i < p; ++i) {
-		if (arr[i] == 2)
-			answer++;
-	}
-
+	//첫 시작 n은 제외
+	recursive_func(n, p, (n * n) % p);
+	for (int i = 0; i < p; ++i) 
+		if (cnt[i] == 2) answer++; //싸이클이 생긴 갯수 체크
+	
 	return answer;
 }
 
 int main(void) {
 	int n, p;
-	int arr[10001] = { 0, };
 
 	scanf("%d %d", &n, &p);
 
-	int ret = solution(arr, n, p);
+	int ret = solution(n, p);
 
 	printf("%d", ret);
 	return 0;
