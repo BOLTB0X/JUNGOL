@@ -8,26 +8,27 @@ string get_trans_number(int t1, int t2, string n) {
 	LL tot = 0, size = n.length();
 	string tmp = "", ret = "";
 
-	//t1Áø¼ö -> 10Áø¼ö
+	//t1ì§„ìˆ˜ -> 10ì§„ìˆ˜
 	for (LL i = size - 1, j = 1; i >= 0; --i, j *= t1) {
-		if (n[i] >= 'A' && n[i] <= 'Z')
-			n[i] = '9' + (n[i] - 'A' + 1);
+		if (n[i] >= 'A')
+			n[i] = '9' + (n[i] - 'A') + 1;
 		tot += j * (n[i] - '0');
 	}
 
-	//10Áø¼ö -> t2Áø¼ö 
+	//10ì§„ìˆ˜ -> t2ì§„ìˆ˜ 
 	while (tot > 0) {
 		if (tot % t2 > 9)
-			tmp += (tot % t2) - 10 + 'A';
+			tmp.push_back((tot % t2) - 10 + 'A');
 		else
-			tmp += (tot % t2) + '0';
+			tmp.push_back((tot % t2) + '0');
 
 		tot /= t2;
 	}
-	size = tmp.length() - 1;
-	//°á°ú ¹İÈ¯À» À§ÇÑ µÚÁı±â
-	for (LL i = size; i >= 0; --i)
-		ret += tmp[i];
+
+	size = tmp.length();
+	//ê²°ê³¼ ë°˜í™˜ì„ ìœ„í•œ ë’¤ì§‘ê¸°
+	for (LL i = size - 1; i >= 0; --i)
+		ret.push_back(tmp[i]);
 
 	return ret;
 }
@@ -42,9 +43,12 @@ int main(void) {
 			break;
 		cin >> number >> type2;
 
-		string ret = get_trans_number(type1, type2, number);
-
-		cout << ret << '\n';
+		if (number == "0")
+			cout << "0" << '\n';
+		else {
+			string ret = get_trans_number(type1, type2, number);
+			cout << ret << '\n';
+		}
 	}
 
 	return 0;
