@@ -1,80 +1,89 @@
 #include <iostream>
-#include <string>
 #include <vector>
+#include <cstring>
 
 using namespace std;
 
 typedef struct {
 	int number, cnt;
-} Info;
+} Bus;
 
-int check[10000] = { 0, };
-
-Info que[10000];
+Bus que[100000];
 int fr = 0, re = 0;
 
-void enqueue(Info data) {
+void enqueue(Bus data) {
 	que[re++] = data;
 	return;
 }
 
-Info dequeue(void) {
+Bus dequeue(void) {
 	return que[fr++];
 }
 
-//에라토스테네체
+int prime[10000]; // 소수이면 1
+
+// 에라토스테네체
 void eratos(void) {
-	check[0] = check[1] = 1;
-	for (int i = 2; i * i <= 9999; ++i) {
-		if (check[i] == 1) //소수X 체크
+	prime[0] = prime[1] = 1;
+
+	for (int i = 2; i *i < 10000; ++i) {
+		// 이미 지워진 경우
+		if (prime[i] == 1)
 			continue;
-		for (int j = i + i; j <= 9999; j += i) 
-			check[j] = 1;
+
+		for (int j = i + i; j < 10000; j += i)
+			prime[j] = 1;
 	}
+
 	return;
 }
 
-//자리수로 체크
-int check_Number(int cur, int next) {
+// 번호가 1만 차이나는가?
+int is_Process(int num1, int num2) {
 	int cnt = 0;
 
-	//4자리 숫자로 고정
-	for (int i = 0, j = 10; i < 4; ++i) {
-		if ((cur % j) != (next % j))
+	// 어차피 네자리 이므로
+	for (int i = 0; i < 4; ++i) {
+		// 다르다면
+		if ((num1 % 10) != (num2 % 10))
 			cnt++;
-		cur /= j;
-		next /= j;
+
+		num1 /= 10;
+		num2 /= 10;
 	}
 
 	return cnt == 1;
 }
 
-//너비우선 탐색
-int BFS(int number1, int number2, vector<int>& visited) {
-	enqueue({ number1 ,0 });
-	visited[number1] = 1;
+// 너비우선 탐색
+int BFS(int number1, int number2) {
+	vector<int> visited(10000, 0); //방문리스트 생성 및 초기화
+
+	visited[number1] = 1; // 방문처리
+	enqueue({ number1, 0 });
 
 	while (fr < re) {
-		Info cur = dequeue();
+		Bus cur = dequeue(); 
 
+		// 목적지에 도달했다면
 		if (cur.number == number2) 
 			return cur.cnt;
 		
-		for (int next = 1000; next <= 9999; ++next) {
-			//재방문 체크
-			if (visited[next] == 1)
+		for (int i = 1000; i <= 9999; ++i) {
+			// 재방문
+			if (visited[i] == 1)
+				continue;
+				
+			// 소수가 아니라면
+			if (prime[i] == 1)
 				continue;
 
-			//소수가 아니라면
-			if (check[next] == 1)
+			// 이동 조건이 맞느가?
+			if (is_Process(cur.number, i) == 0)
 				continue;
 
-			//문제 조건
-			if (check_Number(cur.number, next) == 0)
-				continue;
-			
-			visited[next] = 1;
-			enqueue({ next, cur.cnt + 1 });
+			visited[i] = 1;
+			enqueue({ i, cur.cnt + 1 });
 		}
 	}
 
@@ -83,24 +92,21 @@ int BFS(int number1, int number2, vector<int>& visited) {
 
 int solution(int number1, int number2) {
 	int answer = 0;
-	eratos(); //소수 체크
-	vector<int> visited(10000, false);
-
-	answer = BFS(number1, number2, visited);
+	memset(prime, 10000, 0); // 초기화
+	// 소수 체크
+	eratos();
+	answer = BFS(number1, number2);
 
 	return answer;
 }
 
 int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-
 	int number1, number2;
+
 	cin >> number1 >> number2;
-	
+
 	int ret = solution(number1, number2);
 	cout << ret;
-	
+
 	return 0;
 }
