@@ -2,6 +2,7 @@
 
 using namespace std;
 
+// 재귀
 void recursive_func(int n) {
 	if (n == 0) 
 		return;
