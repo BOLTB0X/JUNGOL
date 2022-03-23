@@ -2,18 +2,18 @@
 
 using namespace std;
 
-int per[10];
+int com[10];
 
 void recursive_func(int n, int level) {
 	if (level > n) {
 		for (int i=1; i<= n;++i)
-			cout << per[i] << ' ';
+			cout << com[i] << ' ';
 		cout << '\n';
 		return;
 	}
 	
-	for (int i= per[level - 1]; i <= 6; ++i) {
-		per[level] = i;
+	for (int i= com[level - 1]; i <= 6; ++i) {
+		com[level] = i;
 		recursive_func(n, level + 1);
 	}
 	
@@ -25,7 +25,7 @@ int main(void) {
 	int n;
 	cin >> n;
 	
-	per[0] = 1;
+	com[0] = 1;
 	recursive_func(n, 1);
 	
 	return 0;
