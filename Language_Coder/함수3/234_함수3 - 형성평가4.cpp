@@ -15,6 +15,7 @@ void recursive_func(int n, int level) {
 
 int main(void) {
 	int n;
+	
 	cin >> n;
 
 	arr[1] = 1;
