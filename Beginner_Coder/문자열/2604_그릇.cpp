@@ -19,15 +19,10 @@ int solution(string bowls) {
 }
 
 int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-
 	string bowls;
 	cin >> bowls;
 
 	int ret = solution(bowls);
-
 	cout << ret;
 
 	return 0;
