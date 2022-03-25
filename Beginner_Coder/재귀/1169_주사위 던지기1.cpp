@@ -1,86 +1,77 @@
 #include <iostream>
 #include <vector>
-
 using namespace std;
 
-vector<int> combi;
-vector<bool> visited;
+vector<int> numbers;
+vector<int> visited(7 ,0);
 
-//중복순열
-void per_with_Repet(int n, int level) {
+void dice1(int n, int level) {
 	if (level == n) {
-		for (int& c : combi) 
-			cout << c << ' ';
+		for (int i = 0; i < numbers.size(); ++i)
+			cout << numbers[i] << ' ';
 		cout << '\n';
 		return;
 	}
 
 	for (int i = 1; i <= 6; ++i) {
-		combi.push_back(i);
-		per_with_Repet(n, level + 1);
-		combi.pop_back();
+		numbers.push_back(i);
+		dice1(n, level + 1);
+		numbers.pop_back();
 	}
+
 	return;
 }
 
-//중복순열
-void com_with_Repet(int n, int level, int cur) {
+void dice2(int n, int cur, int level) {
 	if (level == n) {
-		for (int& c : combi) 
-			cout << c << ' ';
+		for (int i = 0; i < numbers.size(); ++i)
+			cout << numbers[i] << ' ';
 		cout << '\n';
 		return;
 	}
 
 	for (int i = cur; i <= 6; ++i) {
-		combi.push_back(i);
-		com_with_Repet(n, level + 1, i);
-		combi.pop_back();
+		numbers.push_back(i);
+		dice2(n, i, level + 1);
+		numbers.pop_back();
 	}
+
 	return;
 }
 
-//순열
-void per(int n, int level) {
+void dice3(int n, int level) {
 	if (level == n) {
-		for (int& c : combi)
-			cout << c << ' ';
+		for (int i = 0; i < numbers.size(); ++i)
+			cout << numbers[i] << ' ';
 		cout << '\n';
 		return;
 	}
 
 	for (int i = 1; i <= 6; ++i) {
-		if (visited[i])
+		if (visited[i] == 1)
 			continue;
-		combi.push_back(i);
-		visited[i] = true;
-		per(n, level + 1);
-		visited[i] = false;
-		combi.pop_back();
+		visited[i] = 1;
+		numbers.push_back(i);
+		dice3(n, level + 1);
+		numbers.pop_back();
+		visited[i] = 0;
 	}
-	return;
-}
 
-void solution(int n, int m) {
-	if (m == 1)
-		per_with_Repet(n, 0);
-	else if (m == 2)
-		com_with_Repet(n, 0, 1);
-	else if (m == 3) {
-		visited.resize(7, false);
-		per(n, 0);
-	}
 	return;
 }
 
 int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-
 	int n, m;
-	cin >> n >> m;
 
-	solution(n, m);
+	cin >> n >> m;
+	
+	if (m == 1)
+		dice1(n, 0); // 중복 순열
+
+	else if (m == 2)
+		dice2(n, 1, 0); // 중복 조합
+	else 
+		dice3(n, 0); // 순열
+	
 	return 0;
 }
