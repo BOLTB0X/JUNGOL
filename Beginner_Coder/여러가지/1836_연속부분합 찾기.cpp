@@ -9,19 +9,19 @@ int Max(int a, int b) {
 }
 
 int solution(int n) {
-	int answer = -101;
+	int answer = -101; //ìµœëŒ€ë¥¼ ìœ„í•œ
 	int tot = 0;
 
 	for (int i = 1; i <= n; ++i) {
-		// ÇÕÀÌ 0º¸´Ù ÀÛ¾ÆÁö¸é ¿¬¼Ó ½ÃÀÛÁ¡ º¯°æ
+		// í•©ì´ 0ë³´ë‹¤ ìž‘ì•„ì§€ë©´ ì—°ì† ì‹œìž‘ì  ë³€ê²½
 		if (tot < 0)
 			tot = arr[i];
 		else {
 			tot += arr[i];
-			answer = Max(answer, tot); // ´õÇØÁú¶§¸¶´Ù º¯°æ
+			answer = Max(answer, tot); // ë”í•´ì§ˆë•Œë§ˆë‹¤ ë³€ê²½
 		}
 	}
-	answer = Max(answer, tot); // ´õÇØÁú¶§¸¶´Ù º¯°æ
+	answer = Max(answer, tot); // ë”í•´ì§ˆë•Œë§ˆë‹¤ ë³€ê²½
 	return answer;
 }
 
