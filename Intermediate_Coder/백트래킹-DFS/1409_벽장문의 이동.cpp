@@ -4,56 +4,54 @@
 using namespace std;
 
 int result;
+vector<int> doors;
 
-//ÃÖ¼Ú°ª¹İÈ¯
-int MIN(int a, int b) {
-	return a < b ? a : b;
-}
-
-//Àı´ñ°ª ¹İÈ¯
+// ì ˆëŒ“ê°’ ë°˜í™˜
 int Abs(int a) {
 	return a < 0 ? -a : a;
 }
 
-//±íÀÌ¿ì¼±Å½»öÀ¸·Î ¹éÆ®·¡Å· ½ÃÀÛ
-void DFS(int open_door1, int open_door2, int door_size, vector<int>& door, int tot, int level) {
-	//Å»ÃâÁ¶°Ç
-	if (door_size == level) {
-		result = MIN(result, tot);
+// ìµœì†Ÿê°’ ë°˜í™˜
+int Min(int a, int b) {
+	return a < b ? a : b;
+}
+
+void DFS(int size, int op1, int op2, int tot, int level) {
+	// ë‹¤ ì—´ì—ˆë‹¤ë©´
+	if (level == size) {
+		result = Min(result, tot);
 		return;
 	}
 
-	//°¢ ¿­¸° º®Àå¹®À» ¹Ù²Ù¸é¼­ ¹éÆ®·¡Å· Â¡Çà
-	DFS(door[level], open_door2, door_size, door, tot + Abs(open_door1 - door[level]), level + 1);
-	DFS(open_door1, door[level], door_size, door, tot + Abs(open_door2 - door[level]), level + 1);
+	// ê° ì—¬ëŠ” ë¬¸ì„ ë°”ê¾¸ë©´ì„œ ë°±íŠ¸ë˜í‚¹ ì§„í–‰
+	DFS(size, doors[level], op2, tot + Abs(doors[level] - op1), level + 1);
+	DFS(size, op1, doors[level], tot + Abs(doors[level] - op2), level + 1);
 	return;
 }
 
-int solution(int n, int open_door1, int open_door2, int door_size, vector<int>& door) {
+int solution(int n, int open_door1, int open_door2, int door_size) {
 	int answer = 0;
-	result = 0x7fffffff; //ÃÖ¼Ú°ªÀ» À§ÇÑ ÃÊ±âÈ­
+	result = 0x7fffffff; // ìµœì†Ÿë¥¼ ìœ„í•œ
 
-	//¹éÆ®·¡Å· ½ÃÀÛ
-	DFS(open_door1, open_door2, door_size, door, 0, 0);
-	answer = result;
+	// ë°±íŠ¸ë˜í‚¹ìœ¼ë¡œ ì™„ì „íƒìƒ‰ ì‹œì‘
+	DFS(door_size, open_door1, open_door2, 0, 0);
+	answer = result; // ì •ë‹µ
 	return answer;
 }
 
 int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int n, door_size;
+	int open_door1, open_door2;
 
-	int n, open_door1, open_door2, door_size;
-	vector<int> door;
-
-	cin >> n >> open_door1 >> open_door2 >> door_size;
-	door.resize(door_size, 0); //»çÀÌÁî Á¤ÀÇ
+	cin >> n;
+	cin >> open_door1 >> open_door2;
+	cin >> door_size;
+	doors.resize(door_size, 0);
 
 	for (int i = 0; i < door_size; ++i)
-		cin >> door[i];
-
-	int ret = solution(n, open_door1, open_door2, door_size, door);
+		cin >> doors[i];
+	
+	int ret = solution(n, open_door1, open_door2, door_size);
 	cout << ret;
 
 	return 0;
