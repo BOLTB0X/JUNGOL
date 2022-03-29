@@ -1,106 +1,89 @@
 #include <iostream>
 #include <vector>
-#define MV 2501
+#include <string>
+#include <queue>
+#define Max_Size 2511
 
 using namespace std;
 
-typedef struct {
-	int y, x, dist;
-} Block;
+int path;
+char board[51][51];
+vector<vector<int>> dist;
 
-Block que[MV];
-int fr = 0, re = 0;
-
-void enqueue(Block data) {
-	que[re++] = data;
-	return;
-}
-
-Block dequeue(void) {
-	return que[fr++];
-}
-
-int path = -1;
+// 상하좌우
 const int dy[4] = { 1,-1,0,0 };
-const int dx[4] = { 0,0,1,-1 };
+const int dx[4] = { 0,0,-1,1 };
 
-//초기화
-void init(vector<vector<int>>& visited, int n, int m) {
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < m; ++j) 
-			visited[i][j] = MV;
-	}
-	fr = 0, re = 0;
-	return;
-}
+void BFS(int n, int m, int sy, int sx) {
+	queue<pair<int, int>> que;
+	que.push({ sy, sx });
+	dist[sy][sx] = 0;
 
-//너비우선탐색
-void BFS(vector<vector<char>> board, vector<vector<int>>& visited, int n, int m, int y, int x) {
-	visited[y][x] = 0;
-	enqueue({ y,x,0 }); //삽입
-
-	while (fr < re) {
-		Block cur = dequeue();
+	while (!que.empty()) {
+		int cy = que.front().first;
+		int cx = que.front().second;
+		que.pop();
 
 		for (int dir = 0; dir < 4; ++dir) {
-			int ny = cur.y + dy[dir];
-			int nx = cur.x + dx[dir];
+			int ny = cy + dy[dir];
+			int nx = cx + dx[dir];
 
-			//범위초과시
+			// 범위 초과
 			if (ny < 0 || nx < 0 || ny >= n || nx >= m)
 				continue;
-			
-			//물을 만날 경우
+
+			// 물
 			if (board[ny][nx] == 'W')
 				continue;
 
-			int nd = cur.dist + 1;
-			//재방문이고 작다면
-			if (visited[ny][nx] <= nd)
+			// 재방문
+			if (dist[ny][nx] <= dist[cy][cx] + 1)
 				continue;
 
-			if (nd > path) //긴 거리일 경우
-				path = nd;
-			visited[ny][nx] = nd;
-			enqueue({ ny, nx, nd });
+			dist[ny][nx] = dist[cy][cx] + 1;
+			// 거리 교체
+			if (path < dist[ny][nx])
+				path = dist[ny][nx];
+			que.push({ ny, nx });
 		}
 	}
+
 	return;
 }
 
-int solution(vector<vector<char>> &board, int n, int m) {
+int solution(int n, int m) {
 	int answer = 0;
-	vector<vector<int>> visited(n, vector<int>(m, 0)); //방문리스트 생성
+	path = -1; // 최대를 위한
 
-	//완전탐색 방식으로 각 L지점에서 가장 긴거리를 구함
+	// 완전탐색식으로
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < m; ++j) {
+			// 육지
 			if (board[i][j] == 'L') {
-				init(visited, n, m);
-				BFS(board, visited, n, m, i, j);
+				// 초기화
+				dist = vector<vector<int>>(n, vector<int>(m, Max_Size));
+				BFS(n, m, i, j);
 			}
 		}
 	}
 
 	answer = path;
-
 	return answer;
 }
 
 int main(void) {
 	int n, m;
-	vector<vector<char>> board;
 	string tmp;
 
 	cin >> n >> m;
-	board.resize(n, vector<char>(m, 0));
+
 	for (int i = 0; i < n; ++i) {
 		cin >> tmp;
 		for (int j = 0; j < m; ++j)
 			board[i][j] = tmp[j];
 	}
 
-	int ret = solution(board, n, m);
+	int ret = solution(n, m);
 	cout << ret;
 	return 0;
 }
