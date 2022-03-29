@@ -2,103 +2,101 @@
 #include <iostream>
 #include <queue>
 #include <vector>
+#define Max_Size 10012
 
 using namespace std;
 
 typedef struct {
 	int y, x;
-	int cnt;
-} JUG;
+} Jug;
 
 int board[101][101];
-int juggle[101][101];
-bool visited[101][101];
+int dist[101][101];
 
-//»óÇÏ¿ìÁÂ
+// ìƒí•˜ìš°ì¢Œ
 const int dy[4] = { 1, -1, 0, 0 };
 const int dx[4] = { 0, 0, 1, -1 };
 
-//±íÀÌ³ÊºñÅ½»ö
+// ë„ˆë¹„íƒìš°ì„ ìƒ‰
 pair<int, int> BFS(int n, int m, int jx, int jy) {
 	pair<int, int> result = { 0,0 };
-	queue<JUG> que;
+	queue<Jug> que;
 	int time = -1;
 
-	que.push({ jy,jx,0 });
-	visited[jy][jx] = true;
+	que.push({ jy,jx });
+	dist[jy][jx] = 0;
 
 	while (!que.empty()) {
 		int cy = que.front().y;
 		int cx = que.front().x;
-		int cnt = que.front().cnt;
 		que.pop();
 
 		for (int dir = 0; dir < 4; ++dir) {
 			int ny = cy + dy[dir];
 			int nx = cx + dx[dir];
 
-			//¹üÀ§ ÃÊ°ú
+			// ë²”ìœ„ ì´ˆê³¼
 			if (ny < 1 || ny > m || nx < 1 || nx > n)
 				continue;
 
-			//Àç¹æ¹®
-			if (visited[ny][nx] == 1)
+			// ì¬ë°©ë¬¸
+			if (dist[ny][nx] <= dist[cy][cx] + 1)
+				continue;
+			
+			// ë²½ì¸ ê²½ìš°
+			if (board[ny][nx] == 0)
 				continue;
 
-			if (board[ny][nx] == 1) {
-				juggle[ny][nx] = cnt + 1;
-				visited[ny][nx] = true;
-				que.push({ ny, nx, cnt + 1 });
-			}
+			dist[ny][nx] = dist[cy][cx] + 1;
+			que.push({ ny, nx });
 		}
 	}
 
-	//¾îÂ÷ÇÇ Á¢±ÙÇÑ ¾ÖµéÀÌ Á×´Â °Å
+	// ì–´ì°¨í”¼ ì ‘ê·¼í•œ ì• ë“¤ì´ ì£½ëŠ” ê±°
 	for (int i = 1; i <= m; ++i) {
 		for (int j = 1; j <= n; ++j) {
-			if (time < juggle[i][j])
-				time = juggle[i][j];
-			if (board[i][j] == 1 && !visited[i][j])
+			// ë°©ë¬¸í–ˆë˜ ê²ƒë“¤ ì¤‘ ê°€ì¥ í°ê°’
+			if (dist[i][j] != Max_Size && time < dist[i][j])
+				time = dist[i][j];
+
+			// ë¯¸ë°©ë¬¸ ì €ê¸€ë§
+			if (board[i][j] == 1 && dist[i][j] == Max_Size)
 				result.second++;
 		}
 	}
-	
-	result.first = time;
+
+	result.first = time + 3;
 	return result;
 }
 
-pair<int,int> solution(int n, int m, int jx, int jy) {
-	pair<int,int> answer;
+pair<int, int> solution(int n, int m, int jx, int jy) {
+	pair<int, int> answer;
 	for (int i = 0; i <= m; ++i) {
-		for (int j = 0; j <= n; ++j) {
-			juggle[i][j] = 0;
-			visited[i][j] = false;
-		}
+		for (int j = 0; j <= n; ++j)
+			dist[i][j] = Max_Size;
 	}
+
+	// BFS
 	answer = BFS(n, m, jx, jy);
 	return answer;
 }
 
 int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-
 	int n, m, jy, jx;
 
-	scanf("%d %d",&n,&m);
+	scanf("%d %d", &n, &m);
 
 	for (int i = 1; i <= m; ++i) {
 		for (int j = 1; j <= n; ++j)
-			scanf("%1d",&board[i][j]);
+			scanf("%1d", &board[i][j]);
 	}
 
 	scanf("%d %d", &jx, &jy);
 
-	pair<int,int> ret = solution(n, m, jx, jy);
-	int ans1 = ret.first + 3;
+	pair<int, int> ret = solution(n, m, jx, jy);
+	int ans1 = ret.first;
 	int ans2 = ret.second;
-	cout << ans1 << '\n'; //3ÃÊ µÚ Á×À½
+	cout << ans1 << '\n'; //3ì´ˆ ë’¤ ì£½ìŒ
 	cout << ans2 << '\n';
 	return 0;
 }
