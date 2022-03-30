@@ -1,99 +1,104 @@
 #include <iostream>
 #include <vector>
-#define ML 1000001
+#define Max_Size 1001 // 최대 길이
 
 using namespace std;
 
 typedef struct {
 	int y, x, day;
-} TOMATO;
+} Tomato;
 
-TOMATO que[ML];
+Tomato que[Max_Size * Max_Size];
 int fr = 0, re = 0;
 
-void enqueue(TOMATO data) {
+void enqueue(Tomato data) {
 	que[re++] = data;
 	return;
 }
 
-TOMATO dequeue(void) {
-	return que[fr++];
-}
+int board[Max_Size][Max_Size];
+vector<vector<int>> visited;
 
-int result = 0;
+// 상하좌우
+const int dy[4] = { 1,-1,0,0 };
+const int dx[4] = { 0,0,-1,1 };
 
-//상하좌우
-const int dy[4] = { 1, -1, 0, 0 };
-const int dx[4] = { 0, 0, 1, -1 };
+int BFS(int n, int m, vector<vector<int>>& visited) {
+	int result = 0;
 
-//범위 반환
-int in_Range(int y, int x, int m, int n) {
-	return  0 <= y && y < n && 0 <= x && x < m;
-}
-
-//너비우선 탐색
-void BFS(vector<vector<int>>& board, int m, int n) {
+	// BFS
 	while (fr < re) {
-		TOMATO cur = dequeue();
+		int cy = que[fr].y;
+		int cx = que[fr].x;
+		int cday = que[fr].day;
+		fr++; // pop
 
-		for (int dir = 0; dir<4;++dir) {
-			int ny = cur.y + dy[dir];
-			int nx = cur.x + dx[dir];
+		for (int dir = 0; dir < 4; ++dir) {
+			int ny = cy + dy[dir];
+			int nx = cx + dx[dir];
 
-			if (in_Range(ny, nx, m, n) && board[ny][nx] == 0) {
-				board[ny][nx] = 1;
-				result = cur.day + 1;
-				enqueue({ ny,nx, cur.day + 1 });
-			}
+			if (ny < 1 || nx < 1 || ny > m || nx > n)
+				continue;
+
+			// 안익은 토마토가 아니면
+			if (board[ny][nx] != 0)
+				continue;
+
+			if (visited[ny][nx] == 1)
+				continue;
+
+			visited[ny][nx] = 1;
+			result = cday + 1;
+			board[ny][nx] = 1;
+			enqueue({ ny, nx, cday + 1 });
 		}
 	}
-	return;
+
+	return result;
 }
 
-int solution(vector<vector<int>>& board, int m, int n) {
+int solution(int n, int m) {
 	int answer = 0;
+	visited.resize(m + 1, vector<int>(n + 1, 0)); // 방문리스트
 
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < m; ++j) {
-			//토마토 좌표 
-			if (board[i][j] == 1)
-				enqueue({ i,j, 0 });
+	// 익은 토마토 찾기
+	for (int i = 1; i <= m; ++i) {
+		for (int j = 1; j <= n; ++j) {
+			// 토마토 발견
+			if (board[i][j] == 1) {
+				enqueue({ i,j,0 });
+				visited[i][j] = 1;
+			}
+			
 		}
 	}
 
-	BFS(board, m, n);
-	answer = result;
+	answer = BFS(n, m, visited);
 
-	//안익은 토마토가 있으면
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < m; ++j) {
-			if (board[i][j] == 0) 
+	// 안 익은 토마토 찾기
+	for (int i = 1; i <= m; ++i) {
+		for (int j = 1; j <= n; ++j) {
+			if (board[i][j] == 0)
 				return -1;
+
 		}
 	}
 
-	//반환
 	return answer;
 }
 
 int main(void) {
-	//초기화
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int n, m;
+	cin >> n >> m;
 
-	int m, n;
-	vector<vector<int>> board;
-	cin >> m >> n;
-	board.resize(n, vector<int>(m, 0));
-	
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < m; ++j)
+	for (int i = 1; i <= m; ++i) {
+		for (int j = 1; j <= n; ++j) {
 			cin >> board[i][j];
+		}
 	}
-	
-	int ret = solution(board, m, n);
 
-	cout << ret << '\n';
+	int ret = solution(n, m);
+	cout << ret;
+	
 	return 0;
 }
