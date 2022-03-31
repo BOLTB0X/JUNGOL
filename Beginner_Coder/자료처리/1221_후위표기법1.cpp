@@ -3,60 +3,58 @@
 
 using namespace std;
 
-int stack[11];
+int stack[101];
 int top = -1;
 
+// 푸쉬
 void push(int data) {
 	stack[++top] = data;
 	return;
 }
 
+// 팝
 int pop(void) {
 	return stack[top--];
 }
 
-int solution(int n, vector<char>& v) {
+int solution(int n, vector<char>& arr) {
 	int answer = 0;
 
-	for (char& c : v) {
-		//정수일 경우
-		if (c >= '1' && c <= '9') 
-			push(c - '0');
-		
-		//연산자들 만나다면
+	for (char& a : arr) {
+		// 정수를 입력 받으면
+		if (a >= '0' && a <= '9')
+			push(a - '0');
+
 		else {
-			if (c == '+') 
-				stack[top] += pop();
-			else if (c == '-')
-				stack[top] -= pop();
-			else if (c == '*')
-				stack[top] *= pop();
-			else if (c == '/')
-				stack[top] /= pop();
+			int number = pop();
+			if (a == '+')
+				stack[top] += number;
+			
+			else if (a == '-')
+				stack[top] -= number;
+
+			else if (a == '*')
+				stack[top] *= number;
+
+			else if (a == '/')
+				stack[top] /= number;
 		}
 	}
-	
-	//최상단 pop
-	answer = pop();
+
+	answer = pop(); // 최상단
 	return answer;
 }
 
 int main(void) {
-	//초기화
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-
 	int n;
-	vector<char> v;
-
+	vector<char> arr;
+	
 	cin >> n;
-	v.resize(n, 0);
+	arr.resize(n);
 	for (int i = 0; i < n; ++i)
-		cin >> v[i];
+		cin >> arr[i];
 
-	int ret = solution(n, v);
-
+	int ret = solution(n, arr);
 	cout << ret;
 	return 0;
 }
