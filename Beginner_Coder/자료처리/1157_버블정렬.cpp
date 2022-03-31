@@ -1,40 +1,43 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
-void print_arr(int n, int* arr) {
-	for (int i = 0; i < n; ++i)
-		cout << arr[i] << ' ';
-	cout << '\n';
-	return;
-}
+vector<vector<int>> solution(int n, int* arr) {
+	vector<vector<int>> answer;
 
-void bubble_Sort(int n, int* arr) {
+	// 버블정렬
 	for (int i = 1; i < n; ++i) {
 		for (int j = 0; j < n - i; ++j) {
-			if (arr[j + 1] < arr[j])
-				swap(arr[j + 1], arr[j]);
+			// 앞에 있는 원소가 크다면
+			if (arr[j] > arr[j + 1])
+				swap(arr[j], arr[j + 1]);
 		}
-		//출력
-		print_arr(n, arr);
-	}
 
-	return;
+		vector<int> tmp;
+		// 단계가 끝나면 배열을 정답 벡터에 삽입
+		for (int i = 0; i < n; ++i)
+			tmp.push_back(arr[i]);
+		answer.push_back(tmp);
+	}
+	return answer;
 }
 
 int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-
 	int n;
-	int arr[100];
 
 	cin >> n;
+	int* arr = new int[n];
 	for (int i = 0; i < n; ++i)
 		cin >> arr[i];
 
-	bubble_Sort(n, arr);
+	vector<vector<int>> ret = solution(n, arr);
+	for (int i = 0; i < ret.size(); ++i) {
+		for (int& r : ret[i])
+			cout << r << ' ';
+		cout << '\n';
+	}
 
+	delete[] arr;
 	return 0;
 }
