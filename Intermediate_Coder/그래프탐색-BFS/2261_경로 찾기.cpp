@@ -1,99 +1,91 @@
 #include <iostream>
 #include <vector>
-#include <string>
 
 using namespace std;
 
 typedef struct {
-    int idx;
-    vector<int> path;
+	int idx;
+	vector<int> path;
 } Node;
 
-Node que[1001];
+Node que[1000001];
 int fr = 0, re = 0;
 
-void enqueue(Node data) {
-    que[re++] = data;
-    return;
+void push(Node data) {
+	que[re++] = data;
+	return;
 }
 
-Node dequeue(void) {
-    return que[fr++];
+vector<string> hamings;
+
+// 해밍경로가 1인지 체크
+int is_haming_dist(string a, string b, int k) {
+	int cnt = 0;
+
+	for (int i = 0; i < k; ++i) {
+		if (a[i] != b[i])
+			cnt++;
+	}
+
+	return cnt == 1 ? 1 : 0;
 }
 
-//해밍 경로인지 체크
-int is_haming_dist(int k, string next, string cur) {
-    int cnt = 0;
-    for (int i = 0; i < k; ++i) {
-        if (next[i] != cur[i]) {
-            cnt++;
-        }
-    }
-    return cnt == 1 ? 1 : 0;
-}
+vector<int> solution(int n, int k, int start, int end) {
+	vector<int> answer;
+	vector<int> visited(n + 1, 0); // 방문리스트
+	vector<int> tmp; // 임시
 
-void solution(int n, int k, int start, int end, vector<string>& haming) {
-    vector<int> answer;
-    vector<int> tmp, visited(n + 1, 0);
+	tmp.push_back(start);
+	push({start, tmp});
+	visited[start] = 1;
 
-    tmp.push_back(start);
+	// 큐가 비어질때까지
+	while (fr < re) {
+		Node cur = que[fr];
+		fr++; // pop
 
-    enqueue({ start, tmp });
-    visited[start] = 1;
+		// 목적지에 도달한다면
+		if (cur.idx == end) {
+			for (int& p : cur.path)
+				answer.push_back(p);
+			break;
+		}
 
-    while (fr != re) {
-        Node cur = dequeue();
+		// 순회
+		for (int i = 1; i <= n;++i) {
+			// 재방문
+			if (visited[i] == 1)
+				continue;
 
-        //탈출조건
-        if (cur.idx == end) {
-            for (int& c : cur.path)
-                answer.push_back(c);
-            break;
-        }
+			// 해밍경로가 1이면
+			if (is_haming_dist(hamings[cur.idx], hamings[i], k) == 1) {
+				Node next = { i, cur.path };
+				next.path.push_back(i);
+				visited[next.idx] = 1; //방문 처리
+				push(next);
+			}
+		}
+	}
 
-        //순회
-        for (int i = 1; i <= n; ++i) {
-            //재방문 
-            if (visited[i] == 1)
-                continue;
-
-            //해밍 거리가 1인지 확인
-            if (is_haming_dist(k, haming[i], haming[cur.idx]) == 1) {
-                //경로 및 현재 인덱스 업데이트
-                Node next = { i, cur.path };
-                next.path.push_back(i);
-                visited[next.idx] = 1; //방문 처리
-                enqueue(next);
-            }
-        }
-    }
-
-    if (answer.size() == 0)
-        cout << -1;
-    else {
-        for (int& a : answer)
-            cout << a << ' ';
-    }
-
-    return;
+	return answer;
 }
 
 int main(void) {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+	int n, k, start, end;
 
-    int n, k, start, end;
-    vector<string> haming;
+	cin >> n >> k;
+	hamings.resize(n + 1);
+	for (int i = 1; i <= n; ++i) 
+		cin >> hamings[i];
+	cin >> start >> end;
+	
+	vector<int> ret = solution(n, k, start, end);
+	if (ret.size() == 0)
+		cout << -1;
+	else {
+		for (int& r : ret)
+			cout << r << ' ';
+	}
 
-    cin >> n >> k;
-    haming.resize(n + 1);
-
-    for (int i = 1; i <= n; ++i) 
-        cin >> haming[i];
-    
-    cin >> start >> end;
-
-    solution(n, k, start, end, haming);
-    return 0;
+	return 0;
 }
