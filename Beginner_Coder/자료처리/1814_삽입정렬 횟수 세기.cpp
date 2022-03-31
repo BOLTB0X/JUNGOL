@@ -4,12 +4,13 @@ using namespace std;
 
 int insert_Sort(int n, int* arr) {
 	int cnt = 0;
-
+	
+	// 삽입정렬 실행
 	for (int i = 1; i < n; ++i) {
 		for (int j = i; j > 0; --j) {
 			if (arr[j] < arr[j - 1]) {
 				swap(arr[j], arr[j - 1]);
-				cnt++; //스와핑이 일어 날때 카운트
+				cnt++;
 			}
 		}
 	}
