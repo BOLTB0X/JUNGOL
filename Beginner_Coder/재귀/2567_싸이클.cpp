@@ -3,43 +3,38 @@
 
 using namespace std;
 
-vector<int> result(1001, 0);
+vector<int> cnt(1001, 0);
 
-//DFS 이용
-void DFS(int n, int m, int number) {
-	//싸이클이 생기면 탈출
-	if (result[number] == 2)
+// 재귀
+void recursive_func(int n, int p, int number) {
+	// 사이클 생기면 탈출
+	if (cnt[number] == 2)
 		return;
-	result[number]++;
-	DFS(n, m, (number * n) % m);
+
+	cnt[number]++;
+	recursive_func(n, p, (n * number) % p);
 	return;
 }
 
-int solution(int n, int m) {
+int solution(int n, int p) {
 	int answer = 0;
 
-	result[n] = 1;
-	DFS(n, m, (n * n) % m);
+	recursive_func(n, p, (n * n) % p);
 
-	for (int i = 0; i <= 1001; ++i) {
-		if (result[i] == 2)
+	for (int i = 0; i <= 1000; ++i) {
+		if (cnt[i] == 2)
 			answer++;
 	}
 
 	return answer;
 }
-
 int main(void) {
-	//초기화
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int n, p;
 
-	int n, m;
+	cin >> n >> p;
 
-	cin >> n >> m;
-
-	int ret = solution(n, m);
+	int ret = solution(n, p);
 	cout << ret;
+
 	return 0;
 }
