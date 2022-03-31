@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// 스와핑
 void swap(int* a, int* b) {
 	int tmp = *a;
 	*a = *b;
@@ -19,27 +20,33 @@ void print_arr(int* arr, int len) {
 	return;
 }
 
-void solution(void) {
+void solution(int n, int* arr) {
+	for (int i = 0; i < n - 1; ++i) {
+		int min_idx = i;
+		for (int j = i; j < n; ++j) {
+			// 첫 피벗값보다 작은 값을 발견하면
+			if (arr[min_idx] > arr[j])
+				min_idx = j;
+		}
+		// 교체
+		swap(&arr[i], &arr[min_idx]);
+		// 출력
+		print_arr(arr, n);
+	}
+
+	return;
+
+}
+
+int main(void) {
 	int n;
 	scanf("%d", &n);
 
 	int* arr = malloc(sizeof(int) * n);
 	for (int i = 0; i < n; ++i)
 		scanf("%d", &arr[i]);
-	int min_idx;
-	for (int i = 0; i < n - 1; ++i) {
-		int min_idx = i;
-		for (int j = i; j < n; ++j) {
-			if (arr[min_idx] > arr[j]) 
-				min_idx = j;
-		}
-		swap(&arr[i], &arr[min_idx]);
-		print_arr(arr, n);
-	}
-	free(arr);
-}
 
-int main(void) {
-	solution();
+	solution(n, arr);
+	free(arr);
 	return 0;
 }
