@@ -1,7 +1,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <stdlib.h>
 
-//ž�ٿ�
+// 시간초과
+// 탑다운 방식 -> 재귀
 int fibo_recur(int n) {
 	if (n == 1 || n == 2)
 		return 1;
