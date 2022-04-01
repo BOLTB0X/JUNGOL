@@ -1,11 +1,12 @@
 #include <iostream>
+
 using namespace std;
 
-char board[100][100];
+char board[101][101];
 
 void print_board(int n) {
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < n; ++j) 
+	for (int i = 1; i <= n; ++i) {
+		for (int j = 1; j <= n; ++j) 
 			cout << board[i][j] << ' ';
 		cout << '\n';
 	}
@@ -13,23 +14,25 @@ void print_board(int n) {
 }
 
 void solution(int n) {
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < n; ++j)
+	// 초기화
+	for (int i = 0; i <= n; ++i) {
+		for (int j = 0; j <= n; ++j)
 			board[i][j] = ' ';
 	}
 
 	char alp = 'A';
-
-	//�迭�� ä��� ����
-	//(1, 5) (2, 4) (3, 3) (4, 2) (5, 1) (2, 5) (3, 4) 
-	//(4, 3) (5, 2) (3, 5) (4, 4) (5, 3) (4, 5) (5, 4) (5, 5) 
-	for (int i = 0; i < n; i++) {
-		for (int j = i, k = n - 1; j < n; j++, k--) {
+	// 삼각형의 시작방향을 생각하면 됌
+	// (1, 5)
+	// (2, 4) (2,5)
+	// (3, 3) (3, 4) (3, 5)
+	for (int i = 1; i <= n; ++i) {
+		for (int j = i, k = n; j <= n; ++j, --k) {
 			board[j][k] = alp++;
 			if (alp > 'Z')
-				alp = 'A';
+				alp = 'A'; // 초기화
 		}
 	}
+	
 	return;
 }
 
@@ -38,9 +41,8 @@ int main(void) {
 
 	cin >> n;
 
-	solution(n);
-
-	print_board(n);
+	solution(n); 
+	print_board(n); // 출력
 
 	return 0;
 }
