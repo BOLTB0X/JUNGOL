@@ -5,21 +5,22 @@ using namespace std;
 void solution(int n, int m) {
 	if (m == 1) {
 		int number = 0, tmp;
+
 		for (int i = 1; i <= n; ++i) {
 			if (i % 2 == 0) {
 				number += i;
 				tmp = number;
 
 				for (int j = 1; j <= i; ++j)
-					cout << tmp-- << " ";
+					cout << tmp-- << ' ';
 			}
 			else {
 				number++;
 				for (int j = 1; j <= i; ++j)
-					cout << number++ << " ";
-				number--;
+					cout << number++ << ' ';
+				number--; // 증감되어 넘어가므로
 			}
-			cout << "\n";
+			cout << '\n';
 		}
 	}
 	else if (m == 2) {
@@ -36,17 +37,17 @@ void solution(int n, int m) {
 	}
 	
 	else if (m == 3) {
-		for (int i = 1; i <= n / 2; ++i) {
+		for (int i = 1; i <= n / 2 + 1; ++i) {
 			int number = 1;
 			for (int j = 1; j <= i; ++j)
-				cout << number++ << " ";
-			cout << "\n";
+				cout << number++ << ' ';
+			cout << '\n';
 		}
-		for (int i = 0; i <= n / 2; ++i) {
+		for (int i = n / 2; i > 0; --i) {
 			int number = 1;
-			for (int j = 0; j <= n/2 - i; ++j)
-				cout << number++ << " ";
-			cout << "\n";
+			for (int j = 1; j <= i; ++j)
+				cout << number++ << ' ';
+			cout << '\n';
 		}
 	}
 
