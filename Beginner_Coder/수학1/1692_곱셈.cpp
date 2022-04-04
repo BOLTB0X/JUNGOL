@@ -1,34 +1,41 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
-void solution(void) {
-	int num1;
-	//string num2;
-	int num2;
-	cin >> num1 >> num2;
+vector<int> solution(int number1, int number2) {
+	vector<int> answer;
 	
-	//ê° ìžë¦¬ìˆ˜ì™€ num1ì„ ê³±í•©
-	//for (int i = num2.length()-1; i >= 0; --i)
-		//cout << num1 * (num2[i] - '0') << '\n';
+	/*
+	// ¹®ÀÚ¿­·Î Ç¬´Ù¸é?
+	string s1 = to_string(number1);
+	string s2 = to_string(number2);
+	for (int i = 2; i >= 0; --i) {
+		int tmp = stoi(s1) * (s2[i] - '0');
+		answer.push_back(tmp);
+	}
+	answer.push_back(stoi(s1) * stoi(s2));
+	*/
 
-	int tmp = num2;
+	int n2 = number2;
 	for (int i = 0; i < 3; ++i) {
-		cout << num1 * (tmp % 10) << '\n';
-	 	tmp /= 10;
+		int tmp = number1 * (n2 % 10);
+		answer.push_back(tmp);
+		n2 /= 10;
 	}
 
-	cout << num1 * num2 << '\n';
-	//cout << num1 * stoi(num2) << '\n';
-	return;
+	answer.push_back(number1 * number2);
+	return answer;
 }
 
 int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int number1, number2;
 
-	solution();
+	cin >> number1 >> number2;
+	vector<int> ret = solution(number1, number2);
+	for (int& r : ret) 
+		cout << r << '\n';
+	
 	return 0;
 }
