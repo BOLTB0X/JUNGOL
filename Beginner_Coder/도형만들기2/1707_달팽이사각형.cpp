@@ -1,52 +1,52 @@
 #include <iostream>
 #include <cstring>
+
 using namespace std;
 
 int board[101][101];
+// 오 상 왼 하
 const int dy[4] = { 0,1,0,-1 };
 const int dx[4] = { 1,0,-1,0 };
 
-int in_Range(int n, int y, int x) {
-	return 1 <= y && 1 <= x && y <= n && x <= n;
+// 범위 체크
+int in_Range(int y, int x, int n) {
+	return 0 <= y && 0 <= x && y < n && x < n;
 }
 
 void print_sq(int n) {
 	int number = 1;
-	int y = 1, x = 1;
-
-	//초기화
-	for (int i = 1; i <= n; ++i) {
-		for (int j = 1; j <= n; ++j)
-			board[i][j] = 0;
-	}
-
-	while (in_Range(n, y, x) == 1 && board[y][x] == 0) {
+	memset(board, 0, n);
+	int cy = 0, cx = 0;
+	
+	// 시뮬
+	while (board[cy][cx] == 0 && in_Range(cy, cx, n) == 1) {
 		for (int dir = 0; dir < 4; ++dir) {
-			if (in_Range(n, y, x) == 0 || board[y][x] != 0)
+			if (board[cy][cx] != 0 || in_Range(cy, cx, n) == 0)
 				break;
 
-			while (1) {
-				board[y][x] = number++;
-				int ny = y + dy[dir];
-				int nx = x + dx[dir];
 
-				if (in_Range(n, ny, nx) == 0 || board[ny][nx] != 0) {
-					y += dy[(1 + dir) % 4];
-					x += dx[(1 + dir) % 4];
+			while (1) {
+				board[cy][cx] = number++;
+				int ny = cy + dy[dir]; 
+				int nx = cx + dx[dir];
+
+				if (board[ny][nx] != 0 || in_Range(ny, nx, n) == 0) {
+					cy += dy[(1 + dir) % 4];
+					cx += dx[(1 + dir) % 4];
 					break;
 				}
 
-				y = ny; 
-				x = nx;
+				cy = ny, cx = nx;
 			}
 		}
 	}
 
-	for (int i = 1; i <= n; ++i) {
-		for (int j = 1; j <= n; ++j)
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < n; ++j)
 			cout << board[i][j] << ' ';
-		cout << '\n';
+		cout << "\n";
 	}
+	
 	return;
 }
 
