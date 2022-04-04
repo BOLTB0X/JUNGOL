@@ -1,73 +1,71 @@
 #include <iostream>
-#include <cstring>
+#include <vector>
 
 using namespace std;
 
-int board[100][100];
-//´ŞÆØÀÌ ¹æÇâ
+int board[101][101];
+
+// ëŒ€ê°ì„ , ì¢Œ, í•˜
 const int dy[3] = { 1,0,-1 };
-const int dx[3] = { 1,-1,0 };
+const int dx[3] = { 1,-1, 0 };
 
-bool in_Range(int sy, int sx, int n) {
-	return 0 <= sy && sy < n && 0 <= sx && sx < n;
+// ë²”ìœ„ ì²´í¬
+int in_Range(int y, int x, int n) {
+	return 0 <= y && 0 <= x && y < n && x < n;
 }
 
-void init_pane(int n) {
-	for (int i = 0; i < n; ++i)
-		memset(board[i], -1, sizeof(int) * n);
-	return;
+void init(int n) {
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < n; ++j)
+			board[i][j] = -1;
+	}
 }
 
-void print_board(int n) {
-    for (int y = 0; y < n; ++y) {
-        for (int x = 0; x <= y; ++x)
-            cout << board[y][x] << ' ';
-        cout << "\n";
-    }
-    return;
-}
+vector<vector<int>> solution(int n) {
+	vector<vector<int>> answer(n);
+	init(n);
 
-void solution(int n) {
-    init_pane(n);
+	int number = 0;
+	int cy = 0, cx = 0;
+	while (board[cy][cx] == -1 && in_Range(cy, cx, n) == 1) {
+		for (int dir = 0; dir < 3; ++dir) {
+			if (board[cy][cx] != -1 || in_Range(cy, cx, n) == 0)
+				break;
 
-    int cy = 0, cx = 0;
-    int number = 0;
+			while (1) {
+				board[cy][cx] = number++;
+				if (number > 9)
+					number = 0;
 
-    while (in_Range(cy, cx, n) && board[cy][cx] == -1) {
-        for (int dir = 0; dir < 3; ++dir) {
-            if (!in_Range(cy, cx, n) || board[cy][cx] != -1)
-                break;
+				int ny = cy + dy[dir];
+				int nx = cx + dx[dir];
 
-            while (true) {
-                board[cy][cx] = number % 10;
-                number++;
-                int ny = cy + dy[dir];
-                int nx = cx + dx[dir];
+				if (board[ny][nx] != -1 || in_Range(ny, nx, n) == 0) {
+					cy += dy[(1 + dir) % 3];
+					cx += dx[(1 + dir) % 3];
+					break;
+				}
+				cy = ny, cx = nx;
+			}
+		}
+	}
 
-                if (!in_Range(ny, nx, n) || board[ny][nx] != -1) {
-                    cy += dy[(dir + 1) % 3];
-                    cx += dx[(dir + 1) % 3];
-                    break;
-                }
-
-                cy = ny;
-                cx = nx;
-            }
-        }
-    }
-
-    print_board(n);
-    return;
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j <= i; ++j) 
+			answer[i].push_back(board[i][j]);
+	}
+	return answer;
 }
 
 int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-
 	int n;
-	cin >> n;
 
-	solution(n);
+	cin >> n;
+	vector<vector<int>> ret = solution(n);
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j <= i; ++j) 
+			cout << ret[i][j] << ' ';
+		cout << '\n';
+	}
 	return 0;
 }
