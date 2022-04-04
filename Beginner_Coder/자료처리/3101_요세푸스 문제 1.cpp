@@ -4,8 +4,6 @@
 
 using namespace std;
 
-
-
 vector<int> solution(int n, int k) {
 	vector<int> answer;
 	queue<int> que;
@@ -14,20 +12,13 @@ vector<int> solution(int n, int k) {
 		que.push(i);
 
 	while (!que.empty()) {
-		// ±Ê¿Ã∞° 1¿Ã∏È
-		if (que.size() == 1) {
-			answer.push_back(que.front());
-			que.pop(); // pop
-			break;
-		}
-
-		// k - 1æø pop
+		// k - 1Ïî© pop
 		for (int i = 0; i < k - 1; ++i) {
 			que.push(que.front());
 			que.pop(); // pop
 		}
 
-		// √÷ªÛ¥‹ 
+		// ÏµúÏÉÅÎã® 
 		answer.push_back(que.front());
 		que.pop(); // pop;
 	}
