@@ -1,35 +1,29 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
-void print_arr(int n, int* arr) {
-	for (int i = 0; i < n; ++i)
-		cout << arr[i] << ' ';
-	cout << '\n';
-	return;
-}
+vector<vector<int>> solution(int n, int* arr) {
+	vector<vector<int>> answer;
+	int min_idx = 0;
 
-void select_Sort(int n, int* arr) {
-	int min_idx;
-
+	// 선택정렬
 	for (int i = 0; i < n - 1; ++i) {
 		min_idx = i;
+		vector<int> tmp;
 		for (int j = i; j < n; ++j) {
 			if (arr[min_idx] > arr[j])
 				min_idx = j;
 		}
-		swap(arr[i], arr[min_idx]);
-		print_arr(n, arr);
+		swap(arr[min_idx], arr[i]);
+		for (int i = 0; i < n; ++i)
+			tmp.push_back(arr[i]);
+		answer.push_back(tmp);
 	}
-
-	return;
+	return answer;
 }
 
 int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-
 	int n;
 	int arr[100];
 
@@ -37,7 +31,12 @@ int main(void) {
 	for (int i = 0; i < n; ++i)
 		cin >> arr[i];
 
-	select_Sort(n, arr);
+	vector<vector<int>> ret = solution(n, arr);
+	for (vector<int>& r : ret) {
+		for (int i = 0; i < r.size(); ++i)
+			cout << r[i] << ' ';
+		cout << '\n';
+	}
 	
 	return 0;
 }
