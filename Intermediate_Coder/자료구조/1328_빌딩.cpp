@@ -6,32 +6,26 @@ using namespace std;
 
 vector<int> solution(int n, vector<int>& bulidings) {
 	vector<int> answer(n, 0);
-	stack<pair<int, int>> h;
+	stack<pair<int, int>> st;
 
 	for (int i = 0; i < n; ++i) {
-		// ½ºÅÃÀÌ ºñ¾ú´Ù¸é
-		if (h.empty()) 
-			h.push({ i,bulidings[i] });
-
+		// ìŠ¤íƒì´ ë¹„ì—ˆë‹¤ë©´
+		if (st.empty()) 
+			st.push({ i,bulidings[i] });
+		
 		else {
-			//½ºÅÃÀÌ ºñ¾îÁú¶§±îÁö ½ºÅÃÀÇ ÃÖ»ó´Ü ¿ø¼ÒÀÇ ±æÀÌ°¡ ¹è¿­º¸´Ù ÀÛ´Ù¸é
-			//ºôµùÀÌ º¸ÀÎ´Ù´Â °Í
-			while (!h.empty() && h.top().second < bulidings[i]) {
-				answer[h.top().first] = i + 1;
-				h.pop();
+			while (!st.empty() && bulidings[i] > st.top().second) {
+				answer[st.top().first] = (i + 1);
+				st.pop();
 			}
 
-			// ¿¬»ê ÈÄ ÇöÀç ºôµù ½ºÅÃÀ¸·Î
-			h.push({ i,bulidings[i] });
+			st.push({ i,bulidings[i] });
 		}
-
-		
 	}
-	//³²Àº °ÍµéÀº º¸ÀÌ´Â ºôµùÀÌ ¾øÀ¸¹Ç·Î
-	//½ºÅÃ¿¡ ³²Àº ºôµùµé 0Ã³¸®
-	while (!h.empty()) {
-		answer[h.top().first] = 0;
-		h.pop();
+
+	while (!st.empty()) {
+		answer[st.top().first] = 0;
+		st.pop();
 	}
 
 	return answer;
