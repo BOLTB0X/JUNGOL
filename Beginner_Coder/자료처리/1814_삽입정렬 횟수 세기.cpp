@@ -4,18 +4,18 @@ using namespace std;
 
 int insert_Sort(int n, int* arr) {
 	int cnt = 0;
-	
-	// 삽입정렬 실행
+
 	for (int i = 1; i < n; ++i) {
 		for (int j = i; j > 0; --j) {
+			// 앞의 원소가 크다면
 			if (arr[j] < arr[j - 1]) {
 				swap(arr[j], arr[j - 1]);
-				cnt++;
+				cnt++; // 카운트
 			}
 		}
 	}
 
-	return cnt; //반환
+	return cnt;
 }
 
 int main(void) {
